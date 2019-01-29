@@ -1,0 +1,26 @@
+
+Simulateur de transmission de fichier dans un environnement perturbé
+--------------------------------------------------------------------
+
+Responsable du projet : Mohamed Lamine Lamali
+
+
+Contexte :
+
+Dans un environnement où les transmissions sont perturbées (spécialement sur des liens wireless), la probabilité d'erreur (BER) est non négligeable. Or, comme chaque trame erronée doit être renvoyée, on a intérêt à ce que les trames soient les plus petites possible. D'un autre côté, plus une trame est petite, et plus l'overhead dû aux en-têtes est grand. Il existe un compromis, c'est-à-dire une taille optimale de trame, pour une valeur de BER donnée. 
+
+Travail demandé :
+
+Il est demandé de concevoir un simulateur en python, utilisant le module scapy, pour forger des trames et les envoyer avec un BER donné. A la fin, on récupérera la quantité réelle de données et le temps nécessaire à la transmission de toutes les données sans erreur. Le travail demandé est le suivant :
+
+- On a un fichier donné en entrée qu'on va récupérer avec un programme Python
+- Le fichier est découpé en ensembles (tranches) d'octets dont la taille est un paramètre que l'utilisateur donnera
+- Grâce au module Scapy, chaque groupe sera encapsulé dans un datagramme UDP, un paquet IP puis une trame Ethernet
+- Le checksum de la trame ne doit pas être calculé automatiquement par Scapy (mode par défaut), mais "imposé" par un calcul effectué par le programme Python
+- Une fois la trame forgée, on applique aléatoirement une erreur sur chaque bit de la trame (y compris les en-têtes et les checksums) avec une probabilité correspondant au BER
+- Grâce à Scapy, la trame est envoyée sur une interface réseau (Ethernet ou autre), si après l'application aléatoire des erreurs, la trame est erronée, on l'envoie quand même mais la trame suivante à envoyer sera la même, sinon on envoie la trame suivante
+- Avec Wireshark, on doit récupérer les trames envoyées (erronées ou non) et constater le nombre de trames ainsi que le temps nécessaire pour l'envoi total du fichier sans erreur.
+
+Moyens matériels et logiciels :
+
+N'importe quel PC et OS pourront être utilisés. Le code sera en Python avec utilisation du module Scapy, les résultats seront récupérés grâce à Wireshark.
