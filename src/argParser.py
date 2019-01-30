@@ -15,7 +15,7 @@ class Parser:
         args = parser.parse_args()
         print("Simulation launched with :\n")
 #FIXME the order is random for some reason (parse arg or namespace iteration?
-        for arg in args.__dict__:
+        for arg in sorted(args.__dict__):
             print ("\t", arg,":",args.__dict__[arg])
         print()
         return args
