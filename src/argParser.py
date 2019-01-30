@@ -8,4 +8,8 @@ class Parser:
         parser.add_argument('headerSize', type=int, help='int specifying the size in Bytes of the packets headers, Default is 46', nargs='?', default=46)
         parser.add_argument('fileSize', type=int, help='int specifying the size in Bytes of the total data to be sent, Default is 10000000', nargs='?', default=10000000)
         parser.add_argument('BER', type=float, help='float specifing the BER of the virtual network connexion', nargs='?', default=0.2)
-        return parser.parse_args()
+        args = parser.parse_args()
+        print("Simulation launched with :\n")
+        for arg in args.__dict__:
+            print ("\t", arg,":",args.__dict__[arg])
+        return args
