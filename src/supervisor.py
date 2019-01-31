@@ -10,15 +10,17 @@ class Supervisor:
         
     def send(self):
         """When using scappy, just send the packet since error will be simulated in the subclasses"""
-        #send it once
-        self.byteCount += self.sender.send()
-        
-        #if failure resend it
-        randFloat=random.uniform(0, 1)
-        if randFloat < self.chanceOfPacketFailure():
-            self.packetFailure+=1
-            """FIXME can reach recursion limit"""
-            self.send()
+        while True:
+            #send it once
+            self.byteCount += self.sender.send()
+            
+            #if failure resend it
+            randFloat=random.uniform(0, 1)
+            if randFloat < self.chanceOfPacketFailure():
+                self.byteCount += self.sender.send()
+                self.packetFailure+=1
+            else:
+                return
         
     def chanceOfPacketFailure(self):
        return 1-pow(1-self.BER,self.sender.getSize())
