@@ -17,13 +17,13 @@ sender = PacketSender(headerSize, payloadSize)
 modifier = PacketModifier(sender)
 supervisor = Supervisor(sender, BER)
 
-#should be in a separated class?
+# should be in a separated class?
 numberOfPacket, lastSize = divmod(fileSize, payloadSize)
 cpt = numberOfPacket
 while cpt > 0:
     cpt -= 1
     supervisor.send()
-#send last packet
+# send last packet
 if lastSize > 0:
     modifier.setPacket(lastSize)
     supervisor.send()

@@ -60,13 +60,13 @@ import tokenize
 
 import pep8
 
+
 def check_lib2to3():
     try:
         import lib2to3
     except ImportError:
         sys.path.append(os.path.join(os.path.dirname(__file__), 'lib2to3'))
         import lib2to3
-
 
 
 try:
