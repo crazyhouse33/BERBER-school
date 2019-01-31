@@ -3,6 +3,7 @@ import argparse
 from argParser import Parser
 from packetSender import PacketSender
 from supervisor import Supervisor
+from finisher import Finisher
 
 parser = Parser()
 args = parser.parse()
@@ -28,8 +29,8 @@ if lastSize > 0:
     supervisor.send()
     numberOfPacket+=1
 
-print('Simulation terminated. It took', supervisor.getCount(), 'bytes to send ', fileSize, 'bytes:\n\tPacket Sent: ',numberOfPacket,'\n\tPacket failure: ',supervisor.getErrors(), )
-
+finisher = Finisher(supervisor, numberOfPacket, args)
+finisher.finish()
 
 
 
