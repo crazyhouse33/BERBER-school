@@ -23,12 +23,6 @@ class Supervisor:
     def chanceOfPacketFailure(self):
        return 1-pow(1-self.BER,self.sender.getSize())
 
-
-
-    def setPacket(self, payloadSize):
-        self.sender.payloadSize=payloadSize
-
-
     def getCount(self):
         return self.byteCount
 

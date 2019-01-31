@@ -4,6 +4,7 @@ from argParser import Parser
 from packetSender import PacketSender
 from supervisor import Supervisor
 from finisher import Finisher
+from packetModifier import PacketModifier
 
 parser = Parser()
 args = parser.parse()
@@ -13,8 +14,8 @@ payloadSize = args.payloadSize
 BER = args.BER
 fileSize=args.fileSize
 
-
 sender = PacketSender(headerSize, payloadSize)
+modifier= PacketModifier(sender)
 supervisor = Supervisor(sender, BER)
 
 """should be in a separated class?"""
@@ -25,7 +26,7 @@ while cpt>0:
     supervisor.send()
 """send last packet"""
 if lastSize > 0:
-    supervisor.setPacket(lastSize)
+    modifier.setPacket(lastSize)
     supervisor.send()
     numberOfPacket+=1
 
