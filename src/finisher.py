@@ -15,13 +15,14 @@ class Finisher:
                 self.supervisor.getCount(),
                 self.args.BER)
         else:
+            errors = self.supervisor.getErrors()
             print(
                 'Simulation terminated. It took',
                 self.supervisor.getCount(),
                 'bytes to send ',
                 self.args.fileSize,
                 'bytes:\n\tPacket Sent: ',
-                self.numberOfPacket,
+                self.numberOfPacket + errors,
                 '\n\tPacket failure: ',
-                self.supervisor.getErrors(),
+                errors,
             )
