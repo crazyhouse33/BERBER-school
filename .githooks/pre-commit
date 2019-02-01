@@ -18,4 +18,4 @@
 #
 # This sample shows how to prevent push of commits where the log message starts
 # with "WIP" (work in progress).
-find src -name '*.py' -printf 'formatting python code for :%p\n' -exec ./autopep8.py --recursive --in-place --aggressive --aggressive {} \;
+git diff --cached --name-only --diff-filter=ACM | grep '.*\.py' | xargs -I {} bash -c 'echo autoformatting python code: {}; ./autopep8.py --recursive --in-place --aggressive --aggressive {}'
