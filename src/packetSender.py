@@ -15,7 +15,7 @@ class PacketSender:
         """return size of the current loaded Packet"""
         return self.totalSize
 
-    def setPacket(self):
+    def setPacket(self, payloadSize):
         self.payloadSize = payloadSize
         self.computeTotalSize()
 
