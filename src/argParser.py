@@ -29,12 +29,9 @@ class Parser:
             default=defaultHS)
 
         parser.add_argument(
-            '-F',
-            '--fileSize',
-            type=int,
-            help='int specifying the size in Bytes of the total data to be sent, Default is ' +
-            str(defaultFS),
-            default=defaultFS)
+            'filePath',
+            type=str,
+            help='Path to the file to be send. In simuled mode, this argument is the size of the virtual file to be sent.')
 
         parser.add_argument(
             'BER',
@@ -47,7 +44,12 @@ class Parser:
         parser.add_argument("-q", '--quiet', help="decrease output verbosity",
                             action="store_true")
 
+        parser.add_argument("-s", '--simuled', help="do not send any packet",
+                            action="store_true")
+
         args = parser.parse_args()
+        if args.simuled:
+            args.filePath = int(args.filePath)
         if (args.quiet == False):
             print("Simulation launched with :\n")
             for arg in sorted(args.__dict__):
