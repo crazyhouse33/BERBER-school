@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from packetSender import PacketSender
+from packets.simulationPacket import SimulationPacket
 from supervisor import Supervisor
 
 
@@ -10,16 +10,17 @@ class Controller:
 # in simuled mode filePath become the size of the virtual file
         if (args.simuled):
             self.fileSize = args.filePath
+            self.packet = SimulationPacket(args.headerSize, args.payloadSize)
+        else:
+            self.sendFileExperience()
+
+        self.supervisor = Supervisor(self.packet, args.BER)
 
     def run(self):
         args = self.args
         headerSize = args.headerSize
         payloadSize = args.payloadSize
-        BER = args.BER
         filePath = args.filePath
-
-        self.sender = PacketSender(headerSize, payloadSize)
-        self.supervisor = Supervisor(self.sender, BER)
 
         if (args.simuled):
             numberOfPacket = self.simuledExperience(filePath, payloadSize)
@@ -27,6 +28,24 @@ class Controller:
             self.sendFileExperience()
 
         self.terminate(numberOfPacket)
+
+    def simuledExperience(self, fileSize, payloadSize):
+        numberOfPacket, lastSize = divmod(fileSize, payloadSize)
+        cpt = numberOfPacket
+        while cpt > 0:
+            cpt -= 1
+            self.supervisor.send()
+        # send last packet
+        if lastSize > 0:
+            self.packet.setPacket(lastSize)
+            self.supervisor.send()
+            numberOfPacket += 1
+        return numberOfPacket
+
+    def sendFileExperience(self):
+        print(
+            "Sending file functionnality is yet to implement, use -s for now")
+        exit(0)
 
     def terminate(self, numberOfPacket, ):
         # quiet Mode
@@ -48,20 +67,4 @@ class Controller:
                 errors,
             )
 
-    def simuledExperience(self, fileSize, payloadSize):
-        numberOfPacket, lastSize = divmod(fileSize, payloadSize)
-        cpt = numberOfPacket
-        while cpt > 0:
-            cpt -= 1
-            self.supervisor.send()
-        # send last packet
-        if lastSize > 0:
-            self.sender.setPacket(lastSize)
-            self.supervisor.send()
-            numberOfPacket += 1
-        return numberOfPacket
 
-    def sendFileExperience(self):
-        print(
-            "Sending file functionnality is yet to implement, use -s for now")
-        exit(0)

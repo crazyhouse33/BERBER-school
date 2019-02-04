@@ -1,6 +1,4 @@
-class PacketSender:
-    """TODO use SCAPY here, we may frament this class according to the functionnement of scapy"""
-    # Initializer / Instance attributes
+class SimulationPacket:
 
     def __init__(self, headerSize, payloadSize):
         self.headerSize = headerSize
