@@ -51,7 +51,7 @@ class Controller:
         # quiet Mode
         if (self.args.quiet):
             print (
-                self.args.fileSize,
+                self.fileSize,
                 self.supervisor.getCount(),
                 self.args.BER)
         else:
@@ -66,5 +66,3 @@ class Controller:
                 '\n\tPacket failure: ',
                 errors,
             )
-
-
