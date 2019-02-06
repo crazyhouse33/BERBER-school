@@ -10,7 +10,7 @@ class Supervisor:
         self.BER = BER
 
     def setPacket(self, packet):
-            self.packet=packet
+        self.packet = packet
 
     def send(self):
         """When using scappy, just send the packet since error will be simulated in the subclasses"""

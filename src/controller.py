@@ -8,14 +8,12 @@ class Controller:
 
     def __init__(self, args):
         self.args = args
-        self.supervisor= Supervisor(args.BER)
+        self.supervisor = Supervisor(args.BER)
         if (args.simuled):
-            self.simulation=NoPacketSimulation(self.supervisor, args)
+            self.simulation = NoPacketSimulation(self.supervisor, args)
         else:
-            self.simulation=TrueFileSimulation(self.supervisor, args)
+            self.simulation = TrueFileSimulation(self.supervisor, args)
 
     def run(self):
-            self.simulation.run() 
-            self.simulation.terminate()
-
-    
+        self.simulation.run()
+        self.simulation.terminate()
