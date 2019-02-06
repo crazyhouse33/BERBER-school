@@ -1,4 +1,5 @@
 import abc
+import time
 
 
 class Simulation(abc.ABC):
@@ -11,15 +12,19 @@ class Simulation(abc.ABC):
 
     @abc.abstractmethod
     def run(self):
-        pass
+        self.startTime = time.time()
 
     def terminate(self):
+        t1 = time.time()
+        timeTaken = str(1000 * (t1 - self.startTime))
         # quiet Mode
         if (self.args.quiet):
             print (
                 self.supervisor.fileSize,
+                self.args.BER,
                 self.supervisor.getCount(),
-                self.args.BER)
+                timeTaken,
+            )
         else:
             errors = self.supervisor.getErrors()
             print(
@@ -31,4 +36,5 @@ class Simulation(abc.ABC):
                 self.supervisor.numberOfPacket + errors,
                 '\n\tPacket failure: ',
                 errors,
+                '\n\tTime: ' + timeTaken + 'ms'
             )

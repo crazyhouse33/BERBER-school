@@ -2,6 +2,7 @@
 from supervisor import Supervisor
 from simulations.noPacket import NoPacketSimulation
 from simulations.sendTrueFile import TrueFileSimulation
+import time
 
 
 class Controller:

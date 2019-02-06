@@ -11,6 +11,7 @@ class NoPacketSimulation(Simulation):
         Simulation.__init__(self, supervisor, args)
 
     def run(self):
+        super().run()
         numberOfPacket, lastSize = divmod(
             int(self.args.filePath), self.args.payloadSize)
         cpt = numberOfPacket
