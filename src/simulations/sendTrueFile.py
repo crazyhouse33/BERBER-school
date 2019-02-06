@@ -1,16 +1,33 @@
 from packets.scapy import ScapyPacket
+from simulations.simulation import Simulation
+
+import os
 
 
-class TrueFileSimulation:
+class TrueFileSimulation(Simulation):
 
     def __init__(self, supervisor, args):
         self.packet = ScapyPacket(args.headerSize, args.payloadSize)
 
-        supervisor.setPacket(self.packet)
-        self.supervisor = supervisor
-        self.args = args
+        Simulation.__init__(self, supervisor, args)
+
+    def preRun(self):
+        try:
+            self.fileToSend = open(self.args.filePath, 'r')
+        except IOError as e:
+            print ('Cannot open file', self.args.filePath + ':', e.strerror)
+            exit(1)
+
+        self.supervisor.fileSize = os.path.getsize(self.args.filePath)
+        super().preRun()
 
     def run(self):
-        print(
-            "Sending file functionnality is yet to implement, use -s for now")
-        exit(0)
+        numberOfPacket = 0
+        while True:
+            buff = self.fileToSend.read(self.args.payloadSize)
+            if not buff:
+                break
+            self.packet.setPayload(buff)
+            self.supervisor.send()
+            numberOfPacket += 1
+        self.supervisor.numberOfPacket = numberOfPacket

@@ -17,5 +17,8 @@ class ScapyPacket:
         self.payloadSize = payloadSize
         self.computeTotalSize()
 
+    def setPayload(self, newPayload):
+        pass
+
     def computeTotalSize(self):
         self.totalSize = self.payloadSize + self.headerSize

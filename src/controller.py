@@ -16,5 +16,6 @@ class Controller:
             self.simulation = TrueFileSimulation(self.supervisor, args)
 
     def run(self):
+        self.simulation.preRun()
         self.simulation.run()
         self.simulation.terminate()
