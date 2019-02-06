@@ -1,4 +1,7 @@
-class SimulationPacket:
+from packets.packet import Packet
+
+
+class SimulationPacket(Packet):
 
     def __init__(self, headerSize, payloadSize):
         self.headerSize = headerSize
@@ -6,7 +9,6 @@ class SimulationPacket:
         self.totalSize = headerSize + payloadSize
 
     def send(self):
-        """send loaded packet"""
         return self.totalSize
 
     def getSize(self):
@@ -16,6 +18,3 @@ class SimulationPacket:
     def setPacket(self, payloadSize):
         self.payloadSize = payloadSize
         self.computeTotalSize()
-
-    def computeTotalSize(self):
-        self.totalSize = self.payloadSize + self.headerSize

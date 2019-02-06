@@ -1,10 +1,15 @@
-class Simulation:
+import abc
+
+
+class Simulation(abc.ABC):
+    """Abstract class for Simulations"""
 
     def __init__(self, supervisor, args):
         supervisor.setPacket(self.packet)
         self.supervisor = supervisor
         self.args = args
 
+    @abc.abstractmethod
     def run(self):
         pass
 
