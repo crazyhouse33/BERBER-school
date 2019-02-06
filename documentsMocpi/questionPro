@@ -1,0 +1,4 @@
+Pourquoi forcer la vérification de la trame par le checksum, vu que l'on sait si la trame est fausse ou pas;
+Ce serait cool d'avoir une taille des headers variable
+
+
