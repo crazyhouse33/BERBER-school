@@ -1,6 +1,0 @@
-title: quick tests
-suite: quick
-output: output.yaml
-tests:
-- sh: ../../src/main.py 10000 0 -q -s
-  | cut -d ' ' -f 1-3

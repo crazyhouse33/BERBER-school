@@ -36,7 +36,7 @@ class Parser:
         parser.add_argument(
             'BER',
             type=float,
-            help='float specifing the BER of the virtual network connexion' +
+            help='float specifing the BER of the virtual network connexion. Default is ' +
             str(defaultBER),
             nargs='?',
             default=defaultBER)
