@@ -10,6 +10,11 @@ class Packet(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def sendErroned(self):
+        """send an erroned packet, return the size of the packet"""
+        pass
+
+    @abc.abstractmethod
     def getSize(self):
         """return size of the current loaded Packet"""
         pass

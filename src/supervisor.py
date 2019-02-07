@@ -21,7 +21,7 @@ class Supervisor:
             # if failure resend it
             randFloat = random.uniform(0, 1)
             if randFloat < self.chanceOfPacketFailure():
-                self.byteCount += self.packet.send()
+                self.byteCount += self.packet.sendErroned()
                 self.packetFailure += 1
             else:
                 return

@@ -9,6 +9,9 @@ class ScapyPacket:
         """send loaded packet"""
         return self.totalSize
 
+    def sendErroned(self):
+        self.send()
+
     def getSize(self):
         """return size of the current loaded Packet"""
         return self.totalSize
