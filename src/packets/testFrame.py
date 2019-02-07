@@ -9,4 +9,4 @@ if  __name__ == "__main__" :
 	scapyFrame = ScapyPacket(payloadSize, payload)
 	scapyFrame.frame.show()
 	
-	print(scapyFrame.frame.size())
+	#print(scapyFrame.frame.size())
