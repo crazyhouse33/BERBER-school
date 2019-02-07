@@ -16,11 +16,8 @@ class ScapyPacket:
         """return size of the current loaded Packet"""
         return self.totalSize
 
-    def setPacket(self, payloadSize):
-        self.payloadSize = payloadSize
-        self.computeTotalSize()
-
     def setPayload(self, newPayload):
+        """Put a string as payload"""
         pass
 
     def computeTotalSize(self):

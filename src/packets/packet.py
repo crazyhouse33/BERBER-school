@@ -6,22 +6,17 @@ class Packet(abc.ABC):
 
     @abc.abstractmethod
     def send(self):
-        """send loaded packet, return the size of the packet"""
+        """send loaded packet, return the size of the packet which had been sent"""
         pass
 
     @abc.abstractmethod
     def sendErroned(self):
-        """send an erroned packet, return the size of the packet"""
+        """send an erroned packet, return the size of the packet which had been sent"""
         pass
 
     @abc.abstractmethod
     def getSize(self):
         """return size of the current loaded Packet"""
-        pass
-
-    @abc.abstractmethod
-    def setPacket(self, payloadSize):
-        """Set up Packet"""
         pass
 
     def computeTotalSize(self):
