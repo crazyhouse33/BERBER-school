@@ -1,12 +1,17 @@
 from frame import *
+from sys import *
 
 if  __name__ == "__main__" :
 	
+	payload = 'THISISTHEPAYLOAD'
+	print("payload : [" + str(payload) + "] - " + str(len(payload)) + " bytes")
 	
-	payloadSize = 8
-	payload = "01010101"
+	scapyFrame = ScapyPacket(payload)
+	scapyFrame.display()
 	
-	scapyFrame = ScapyPacket(payloadSize, payload)
-	scapyFrame.frame.show()
+	print("real frame size (without Ethernet CRC) :\n" + str(len(scapyFrame.frame)) + " bytes / " + str(len(scapyFrame.frame)*8) + " bits\n")
+	print("computed frame size :\n" + str(scapyFrame.getSize()) + " bytes / " + str(scapyFrame.getSize()*8) + " bits")
 	
-	#print(scapyFrame.frame.size())
+	scapyFrame.send()
+	
+	
