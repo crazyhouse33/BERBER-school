@@ -19,3 +19,7 @@
 # This sample shows how to prevent push of commits where the log message starts
 # with "WIP" (work in progress).
 git diff --cached --name-only --diff-filter=ACM | grep '.*\.py' | xargs -I {} bash -c 'echo autoformatting python code: {}; ./autopep8.py --recursive --in-place --aggressive --aggressive {}'
+echo 'Running test. If tests fails, You cant commit'
+pwd
+./tests/runQuickTests.sh
+
