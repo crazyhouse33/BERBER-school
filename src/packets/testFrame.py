@@ -1,6 +1,7 @@
 from frame import *
 from sys import *
 
+# ! launch as root !
 if  __name__ == "__main__" :
 	
 	payload = 'THISISTHEPAYLOAD'
