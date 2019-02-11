@@ -1,4 +1,4 @@
-from frame import *
+from scapyPacket import *
 from sys import *
 
 # ! launch as root !
