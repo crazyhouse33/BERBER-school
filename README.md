@@ -6,3 +6,7 @@ negligeable BER environment. Defaults settings for Headers/Payload Size
 correspond approxymately to UDP over IP over Ethernet scenario
 
 ./main.py -h for help
+
+dependencies:
+scapy: pip3 install scapy
+

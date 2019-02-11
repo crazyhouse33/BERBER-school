@@ -1,4 +1,4 @@
-from packets.scapy import ScapyPacket
+from packets.scapyPacket import ScapyPacket
 from simulations.simulation import Simulation
 
 import os
