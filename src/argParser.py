@@ -5,7 +5,7 @@ class Parser:
     """parse the arguments, TODO make only fileSize positional"""
 
     def parse(self):
-        defaultPS = 1462
+        defaultPS = 1476
         defaultHS = 42
         defaultFS = 10000
         defaultBER = 0
