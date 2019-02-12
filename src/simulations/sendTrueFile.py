@@ -7,7 +7,7 @@ import os
 class TrueFileSimulation(Simulation):
 
     def __init__(self, supervisor, args):
-        self.packet = ScapyPacket(args.headerSize, args.payloadSize)
+        self.packet = ScapyPacket(args.headerSize)
 
         Simulation.__init__(self, supervisor, args)
 
