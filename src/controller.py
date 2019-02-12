@@ -2,7 +2,7 @@
 from supervisor import Supervisor
 from simulations.noPacket import NoPacketSimulation
 from simulations.sendTrueFile import TrueFileSimulation
-import time
+import os
 
 
 class Controller:
@@ -13,9 +13,14 @@ class Controller:
         if (args.simuled):
             self.simulation = NoPacketSimulation(self.supervisor, args)
         else:
+            if not self.IAmRoot():
+                exit("Scapy need root privileges to open raw socket. Exiting.")
             self.simulation = TrueFileSimulation(self.supervisor, args)
 
     def run(self):
         self.simulation.preRun()
         self.simulation.run()
         self.simulation.terminate()
+
+    def IAmRoot(self):
+        return os.geteuid == 0

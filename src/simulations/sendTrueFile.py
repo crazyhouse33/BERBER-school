@@ -7,7 +7,7 @@ import os
 class TrueFileSimulation(Simulation):
 
     def __init__(self, supervisor, args):
-        self.packet = ScapyPacket(args.headerSize, args.payloadSize)
+        self.packet = ScapyPacket(args.headerSize)
 
         Simulation.__init__(self, supervisor, args)
 
@@ -24,6 +24,7 @@ class TrueFileSimulation(Simulation):
     def run(self):
         numberOfPacket = 0
         while True:
+            print ("tamere")
             buff = self.fileToSend.read(self.args.payloadSize)
             if not buff:
                 break
