@@ -43,13 +43,6 @@ class Simulation(abc.ABC):
                 '\n\tTime: ' + timeTaken + 'ms'
             )
 
-        """create a string of random data of size bytes"""
-
-    def createData(self, size):
-        data = ""
-        for x in range(size):
-            data += random.choice(string.hexdigits)
-        return data
 
     """apply a BER on each bit of a binary byte string"""
 
