@@ -2,7 +2,7 @@ import random
 
 
 class Supervisor:
-    """Create and use a PacketSender to luanch packet and actually computes statistics"""
+    """Create and use a PacketSender to launch packet and actually compute statistics"""
 
     def __init__(self, BER):
         self.byteCount = 0
@@ -13,7 +13,7 @@ class Supervisor:
         self.packet = packet
 
     def send(self):
-        """When using scappy, just send the packet since error will be simulated in the subclasses"""
+        """When using scapy, just send the packet since error will be simulated in the subclasses"""
         while True:
             # send it once
             self.byteCount += self.packet.send()

@@ -1,4 +1,4 @@
-from scapyPacket import *
+from ../../src/packets/scapyPacket import *
 from sys import *
 
 # ! launch as root !

@@ -5,18 +5,18 @@ class Parser:
     """parse the arguments, TODO make only fileSize positional"""
 
     def parse(self):
-        defaultPS = 1454
-        defaultHS = 16
+        defaultPS = 1462
+        defaultHS = 42
         defaultFS = 10000
         defaultBER = 0
         parser = argparse.ArgumentParser(
-            description='Simulation to observe the trade-of between small/large packet in non negligeable BER environment. Defaults settings for Headers/Payload Size correspond approxymately to UDP over IP over Ethernet scenario')
+            description='Simulation to observe the trade-off between small/large packet in non negligeable BER environment. Defaults settings for Headers/Payload Size correspond approximately to UDP over IP over Ethernet scenario')
 
         parser.add_argument(
             '-P',
             '--payloadSize',
             type=int,
-            help='int specifying the size in Bytes of the packets payload. Default is ' +
+            help='integer specifying the size in Bytes of the packets payload. Default is ' +
             str(defaultPS),
             default=defaultPS)
 
@@ -24,19 +24,19 @@ class Parser:
             '-H',
             '--headerSize',
             type=int,
-            help='int specifying the size in Bytes of the packets headers, Default is ' +
+            help='integer specifying the size in Bytes of the packets headers. Default is ' +
             str(defaultHS),
             default=defaultHS)
 
         parser.add_argument(
             'filePath',
             type=str,
-            help='Path to the file to be send. In simuled mode, this argument is the size of the virtual file to be sent.')
+            help='Path to the file to be send. In simulated mode, this argument is the size of the virtual file to be sent.')
 
         parser.add_argument(
             'BER',
             type=float,
-            help='float specifing the BER of the virtual network connexion. Default is ' +
+            help='float specifying the BER of the virtual network connexion. Default is ' +
             str(defaultBER),
             nargs='?',
             default=defaultBER)
