@@ -42,3 +42,45 @@ class Simulation(abc.ABC):
                 errors,
                 '\n\tTime: ' + timeTaken + 'ms'
             )
+
+        """create a string of random data of size bytes"""
+
+    def createData(self, size):
+        data = ""
+        for x in range(size):
+            data += random.choice(string.hexdigits)
+        return data
+
+    """apply a BER on each bit of a binary byte string"""
+
+    def BERonByte(self, BER, byte_bin):
+        newbyte_bin = ""
+        #BER = 0.005
+        for bit in byte_bin:
+            probability = random.random()  # float aléatoire entre 0 et 1
+            if probability <= BER:
+                if bit == '0':
+                    bit = '1'
+                elif bit == '1':
+                    bit = '0'
+            newbyte_bin += bit
+        return newbyte_bin
+
+    """apply BER on a packet"""
+
+    def applyBERonPacket(self, BER, packet):
+        packet_bytes = bytearray(bytes(packet, 'ascii'))
+        for i in range(len(packet_bytes)):
+            byte = packet_bytes[i]
+            # transforme l'entier octet en string binaire (ex: 65 en 0b1000001)
+            byte_bin = bin(byte)
+            byte_bin = byte_bin[2:]  # supprime le 0b du string
+            byte_bin = self.BERonByte(BER, byte_bin)
+            str_bin = "0b"
+            byte_bin = str_bin + byte_bin  # rajoute le 0b au string binaire
+            byte = int(
+                byte_bin,
+                2)  # retransforme le string binaire en un octet entier
+            packet_bytes[i] = byte
+        packet = packet_bytes.decode("ascii")
+        return packet
