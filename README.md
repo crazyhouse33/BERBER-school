@@ -9,4 +9,5 @@ correspond approxymately to UDP over IP over Ethernet scenario
 
 dependencies:
 scapy: pip3 install scapy
+bitstrings: pip3 install bitstrings
 
