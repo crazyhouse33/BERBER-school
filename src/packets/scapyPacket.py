@@ -35,7 +35,8 @@ class ScapyPacket(Packet):
 
     def sendErroned(self):
         erronedPayload= self.getFlipedPayload(0)
-        return self.send()
+        self.sendString(erronedPayload)
+        return self.totalSize
 
     def setPayload(self, payload):
         self.payloadSize = len(payload)
@@ -55,6 +56,9 @@ class ScapyPacket(Packet):
     def getFlipedPayload(self, positionList):
         flippedPayload=BitArray(bytes=self.payload)
         flippedPayload.invert(positionList)
+
+        print ('before flip:\n',self.payload,'after\n', flippedPayload.bytes)
+        return flippedPayload.bytes
         
 
 
