@@ -1,6 +1,6 @@
 from scapy.all import *
 from packets.packet import Packet
-from bitstring import BitArray# flip bit of string
+from bitstring import BitArray
 
 
 class ScapyPacket(Packet):
@@ -22,28 +22,29 @@ class ScapyPacket(Packet):
             '''
         self.IP_DST_ADDRESS = "127.0.0.1"
         self.UDP_PORT = 12349
-
-        self.frameBase=IP(dst=self.IP_DST_ADDRESS) / UDP(sport=self.UDP_PORT)
+        self.baseFrame = Ether() / IP(dst=self.IP_DST_ADDRESS) / UDP(sport=self.UDP_PORT)
 
     def send(self):
         """send loaded packet"""
-        self.sendString(self.payload)
+        sendp(self.frame, verbose=0)
         return self.totalSize
 
-    def sendString(self, string):
-        sendp(self.frameBase / Raw(string), verbose=0)
-
     def sendErroned(self):
-        erronedPayload= self.getFlipedPayload(0)
-        self.sendString(erronedPayload)
+        bytesString = bytes(self.frame)
+
+        bits = BitArray(bytesString)
+        #TODO test it instead of printing it
+        #print ('before\n', bits.bytes )
+        bits.invert(0)
+        #print( 'after\n',bits.bytes)
+        sendp(Raw(bits.bytes), verbose=0)
         return self.totalSize
 
     def setPayload(self, payload):
         self.payloadSize = len(payload)
         self.computeTotalSize()
-        self.payload = payload.encode('utf-8')
-
-        #print (str(self.frame))
+        payload = Raw(load=payload)
+        self.frame= self.baseFrame / payload
 
     def getSize(self):
         return self.totalSize
@@ -51,14 +52,3 @@ class ScapyPacket(Packet):
     def display(self):
         self.frame.show()
         print(str(self.frame) + "\n")
-
-#put all of that stuff in an other class stringModifier
-    def getFlipedPayload(self, positionList):
-        flippedPayload=BitArray(bytes=self.payload)
-        flippedPayload.invert(positionList)
-
-        print ('before flip:\n',self.payload,'after\n', flippedPayload.bytes)
-        return flippedPayload.bytes
-        
-
-
