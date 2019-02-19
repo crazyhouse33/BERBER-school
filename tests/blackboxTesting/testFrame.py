@@ -1,8 +1,11 @@
-from scapyPacket import *
-from sys import *
 import unittest
+import os
 
-# ! launch as root !
+os.chdir("../../src/packets")
+from scapyPacket import *
+os.chdir("../../tests/blackboxTesting")
+
+
 class TestFrame(unittest.TestCase) :
 
     def testPacketForging(self) :

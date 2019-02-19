@@ -1,22 +1,20 @@
-from packets.scapyPacket import ScapyPacket
-from simulations.simulation import Simulation
-
 import os
+import random
+import string
+
+os.chdir("../packets")
+from scapyPacket import ScapyPacket
+os.chdir("../simulations")
+
+from simulation import Simulation
 
 
 class randomSeriesSimulation:
 
-    def __init__(self, args):
-        
-        self.data = self.createData(args.filePath)
-        self.splittedData = self.split(self.data)
-        self.packet = ScapyPacket(payload)
+    def __init__(self, dataSize, splitSize):
+        self.data = self.createData(dataSize)
+        self.splittedData = self.split(self.data, splitSize)
 
-        Simulation.__init__(self, supervisor, args)
-        
-        if self.testSplit("abcdefghijk", 2):
-            print("testSplit OK")
-    
     
     '''create a string of random data of size bytes'''
     def createData(self, size):
