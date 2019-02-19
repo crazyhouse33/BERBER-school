@@ -26,7 +26,7 @@ class ScapyPacket(Packet):
 
     def send(self):
         """send loaded packet"""
-        sendp(self.frame, verbose=0)
+        sendp(self.frame, verbose=0, iface='lo' )
         return self.totalSize
 
     def sendErroned(self):
@@ -35,9 +35,9 @@ class ScapyPacket(Packet):
         bits = BitArray(bytesString)
         #TODO test it instead of printing it
         #print ('before\n', bits.bytes )
-        bits.invert(0)
+        bits.invert(int(self.totalSize/2))
         #print( 'after\n',bits.bytes)
-        sendp(Raw(bits.bytes), verbose=0)
+        sendp(Raw(bits.bytes), verbose=0, iface='lo')
         return self.totalSize
 
     def setPayload(self, payload):

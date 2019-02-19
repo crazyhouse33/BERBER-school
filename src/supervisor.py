@@ -7,6 +7,7 @@ class Supervisor:
 
     def __init__(self, BER):
         self.byteCount = 0
+        self.numberOfPacket = 0
         self.packetFailure = 0
         self.BER = BER
 
@@ -15,10 +16,10 @@ class Supervisor:
 
     def send(self):
         """When using scappy, just send the packet since error will be simulated in the subclasses"""
+        # send it once
+        self.byteCount += self.packet.send()
+        self.numberOfPacket += 1
         while True:
-            # send it once
-            self.byteCount += self.packet.send()
-
             # if failure resend it
             randFloat = random.uniform(0, 1)
             if randFloat < self.chanceOfPacketFailure():
