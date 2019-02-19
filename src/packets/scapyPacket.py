@@ -1,4 +1,4 @@
-from scapy.all import *
+from scapy.all import Raw, Ether, IP, UDP, sendp
 from packets.packet import Packet
 from bitstring import BitArray
 
