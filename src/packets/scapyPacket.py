@@ -22,7 +22,7 @@ class ScapyPacket(Packet):
             '''
         self.IP_DST_ADDRESS = "127.0.0.1"
         self.UDP_PORT = 12349
-        self.baseFrame = Ether() / IP(dst=self.IP_DST_ADDRESS) / UDP(sport=self.UDP_PORT)
+        self.baseFrame = Ether() / IP(dst=self.IP_DST_ADDRESS) / UDP(sport=self.UDP_PORT, dport=self.UDP_PORT)
 
     def send(self):
         """send loaded packet"""
