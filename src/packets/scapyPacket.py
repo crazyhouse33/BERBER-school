@@ -26,7 +26,7 @@ class ScapyPacket(Packet):
 
     def send(self):
         """send loaded packet"""
-        sendp(self.frame.bytes, verbose=0, iface='lo' )
+        sendp(Raw(self.frame.bytes), verbose=0, iface='lo' )
         return self.totalSize
 
     def sendErroned(self):
@@ -36,6 +36,9 @@ class ScapyPacket(Packet):
         self.flipBit(int(self.totalSize/2))
         #print( 'after\n',bits.bytes)
         sendp(Raw(self.frame.bytes), verbose=0, iface='lo')
+
+#sendErronned is not supposed to alter target payload. to ecnonomise the copy we just flip back altered bits at the end
+        self.flipBit(int(self.totalSize/2))
         return self.totalSize
 
     def setPayload(self, payload):
