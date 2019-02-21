@@ -1,5 +1,6 @@
 import random
 import string
+import crcmod
 
 from packets.scapyPacket import ScapyPacket
 from simulations.simulation import Simulation
@@ -24,12 +25,17 @@ class RandomSeriesSimulation(Simulation):
             
             frame = str(packet.frame)
             #print("packet :\n" + packet + "\n")
+            checksumBeforeBER = self.calculateFCS(frame)
             
             berFrame = self.applyBERonPacket(self.ber, frame)
             #print("BER packet :\n" + berPacket + "\n")
-            
+            checksumAfterBER = self.calculateFCS(berFrame)
+
+
             #TODO calculate checksum instead
-            error = (frame != berFrame)
+           # error = (frame != berFrame)
+            error = (checksumBeforeBER != checksumAfterBER)
+
             #print("error : " + str(error) + "\n\n")
             
             packet.send()
@@ -57,4 +63,11 @@ class RandomSeriesSimulation(Simulation):
             res.append(nextElement)
             index = index + splitSize
         return res
+
+    def calculateFCS(self, frame):
+        frame_bytes = bytearray(bytes(frame, 'ascii'))
+        crc32_func = crcmod.mkCrcFun(0x104c11db7, initCrc=0, xorOut=0xFFFFFFFF)
+        crc_hex = hex(crc32_func(frame_bytes))
+        return crc_hex
+
     
