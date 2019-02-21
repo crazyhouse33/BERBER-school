@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from supervisor import Supervisor
+from supervisor_robin import Supervisor_robin
 from simulations.noPacket import NoPacketSimulation
 from simulations.randomSeriesSimulation import RandomSeriesSimulation
 from simulations.sendTrueFile import TrueFileSimulation
@@ -10,16 +10,16 @@ class Controller:
 
     def __init__(self, args):
         self.args = args
-        self.supervisor = Supervisor(args.ber)
+        self.supervisor = Supervisor_robin(args)
         if (args.simulated):
             self.simulation = NoPacketSimulation(self.supervisor, args)
         else:
             if (args.random):
-                self.simulation = RandomSeriesSimulation(float(args.ber), int(args.filePath), int(args.payloadSize))
+                self.simulation = RandomSeriesSimulation(self.supervisor)
             else:
                 self.simulation = TrueFileSimulation(self.supervisor, args)
 
     def run(self):
         self.simulation.preRun()
         self.simulation.run()
-        #self.simulation.terminate()
+        self.simulation.terminate()

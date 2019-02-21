@@ -16,9 +16,9 @@ class ScapyPacket:
         self.checksumSize = 4
         
         self.payload = payload
-        self.size = self.HEADER_SIZE + self.payloadSize
+        self.size = self.HEADER_SIZE + self.payloadSize + self.checksumSize
         
-        self.frame = Ether()/IP(dst=self.IP_DST_ADDRESS)/UDP(sport=self.UDP_PORT, dport=self.UDP_PORT)/raw(self.payload)
+        self.frame = Ether()/IP(dst=self.IP_DST_ADDRESS)/UDP(sport=self.UDP_PORT, dport=self.UDP_PORT)/raw(self.payload + "/fcs")
 
 
     def send(self):

@@ -2,15 +2,20 @@ import random
 import string
 
 from packets.scapyPacket import ScapyPacket
-from simulations.simulation import Simulation
+from simulations.simulation_robin import Simulation_robin
 
 
-class RandomSeriesSimulation(Simulation):
+class RandomSeriesSimulation(Simulation_robin):
 
-    def __init__(self, ber, dataSize, splitSize):
-        self.ber = ber
-        self.data = self.createData(dataSize)
-        self.splittedData = self.split(self.data, splitSize)
+    def __init__(self, supervisor):
+        self.supervisor = supervisor
+        self.ber = supervisor.args.ber
+        
+        self.dataSize = int(self.supervisor.args.filePath)
+        self.data = self.createData(self.dataSize)
+        
+        self.payloadSize = self.supervisor.args.payloadSize
+        self.splittedData = self.split(self.data, self.payloadSize)
     
     '''
     start the simulation : create packets, apply BER and send it
@@ -33,9 +38,11 @@ class RandomSeriesSimulation(Simulation):
             #print("error : " + str(error) + "\n\n")
             
             packet.send()
+            self.supervisor.byteCount += packet.getSize()
+            self.supervisor.packetCount += 1
             
             if(error): #wrong frame, resend it
-                continue
+                self.supervisor.wrongFrameCount += 1
             else: #right frame, go to next iteration
                 i += 1
         
