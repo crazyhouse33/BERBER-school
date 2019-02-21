@@ -1,27 +1,31 @@
 import abc
 from abc import ABCMeta, abstractmethod  # strange error when removing that
 import time
+import random
 
 
 class Simulation(abc.ABC):
     """Abstract class for Simulations, dont forget to set up supervisor.fileSize and number in packet (TODO force that with interface)"""
-
+    
+    
     def __init__(self, supervisor, args):
         supervisor.setPacket(self.packet)
         self.supervisor = supervisor
         self.args = args
-
+    
+    
     def preRun(self):
         self.startTime = time.time()
 
     @abstractmethod
     def run(self):
         pass
-
+    
     def terminate(self):
         t1 = time.time()
         timeTaken = str(1000 * (t1 - self.startTime))
         # quiet Mode
+        
         if (self.args.quiet):
             print (
                 self.supervisor.fileSize,
@@ -29,6 +33,7 @@ class Simulation(abc.ABC):
                 self.supervisor.getCount(),
                 timeTaken,
             )
+        
         else:
             errors = self.supervisor.getErrors()
             print(
@@ -45,7 +50,6 @@ class Simulation(abc.ABC):
 
 
     """apply a BER on each bit of a binary byte string"""
-
     def BERonByte(self, BER, byte_bin):
         newbyte_bin = ""
         #BER = 0.005
@@ -60,7 +64,6 @@ class Simulation(abc.ABC):
         return newbyte_bin
 
     """apply BER on a packet"""
-
     def applyBERonPacket(self, BER, packet):
         packet_bytes = bytearray(bytes(packet, 'ascii'))
         for i in range(len(packet_bytes)):

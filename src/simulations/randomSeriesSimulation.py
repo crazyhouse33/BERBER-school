@@ -1,21 +1,44 @@
-import os
 import random
 import string
 
-os.chdir("../packets")
-from scapyPacket import ScapyPacket
-os.chdir("../simulations")
-
-from simulation import Simulation
+from packets.scapyPacket import ScapyPacket
+from simulations.simulation import Simulation
 
 
-class randomSeriesSimulation:
+class RandomSeriesSimulation(Simulation):
 
-    def __init__(self, dataSize, splitSize):
+    def __init__(self, ber, dataSize, splitSize):
+        self.ber = ber
         self.data = self.createData(dataSize)
         self.splittedData = self.split(self.data, splitSize)
-
     
+    '''
+    start the simulation : create packets, apply BER and send it
+    '''
+    def run(self):
+        i = 0
+        while(i < len(self.splittedData)):
+            
+            payload = self.splittedData[i]
+            packet = ScapyPacket(payload)
+            
+            frame = str(packet.frame)
+            #print("packet :\n" + packet + "\n")
+            
+            berFrame = self.applyBERonPacket(self.ber, frame)
+            #print("BER packet :\n" + berPacket + "\n")
+            
+            #TODO calculate checksum instead
+            error = (frame != berFrame)
+            #print("error : " + str(error) + "\n\n")
+            
+            packet.send()
+            
+            if(error): #wrong frame, resend it
+                continue
+            else: #right frame, go to next iteration
+                i += 1
+        
     '''create a string of random data of size bytes'''
     def createData(self, size):
         data = ""

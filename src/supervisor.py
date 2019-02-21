@@ -4,10 +4,10 @@ import random
 class Supervisor:
     """Create and use a PacketSender to launch packet and actually compute statistics"""
 
-    def __init__(self, BER):
+    def __init__(self, ber):
         self.byteCount = 0
         self.packetFailure = 0
-        self.BER = BER
+        self.ber = ber
 
     def setPacket(self, packet):
         self.packet = packet
@@ -27,7 +27,7 @@ class Supervisor:
                 return
 
     def chanceOfPacketFailure(self):
-        return 1 - pow(1 - self.BER, self.packet.getSize())
+        return 1 - pow(1 - self.ber, self.packet.getSize())
 
     def getCount(self):
         return self.byteCount

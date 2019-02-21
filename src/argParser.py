@@ -34,7 +34,7 @@ class Parser:
             help='Path to the file to be send. In simulated mode, this argument is the size of the virtual file to be sent.')
 
         parser.add_argument(
-            'BER',
+            'ber',
             type=float,
             help='float specifying the BER of the virtual network connexion. Default is ' +
             str(defaultBER),
@@ -44,11 +44,14 @@ class Parser:
         parser.add_argument("-q", '--quiet', help="decrease output verbosity",
                             action="store_true")
 
-        parser.add_argument("-s", '--simuled', help="do not send any packet",
+        parser.add_argument("-s", '--simulated', help="do not send any packet",
+                            action="store_true")
+        
+        parser.add_argument("-r", '--random', help="use a random series of bytes",
                             action="store_true")
 
         args = parser.parse_args()
-        if args.simuled:
+        if args.simulated:
             args.filePath = int(args.filePath)
         if (args.quiet == False):
             print("Simulation launched with :\n")
