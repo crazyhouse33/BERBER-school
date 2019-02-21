@@ -10,7 +10,7 @@ class testRandomSeriesSimulation(unittest.TestCase) :
     def testCreateData(self):
         size = 20
         print("\nTESTING DATA GENERATION...")
-        simul = RandomSeriesSimulation(size, 4)
+        simul = RandomSeriesSimulation(0, size, 4)
         data = simul.createData(size)
         print("generated data : " + data)
         self.assertEqual(len(data), size)
@@ -18,7 +18,7 @@ class testRandomSeriesSimulation(unittest.TestCase) :
     def testSplit(self):
         print("\nTESTING DATA SPLITTING...")
         
-        simul = RandomSeriesSimulation(20, 4)
+        simul = RandomSeriesSimulation(0, 20, 4)
         
         print("data :\n" + simul.data + "\n")
         
