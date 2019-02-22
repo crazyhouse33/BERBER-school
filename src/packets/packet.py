@@ -6,7 +6,7 @@ class Packet(abc.ABC):
 
     @abc.abstractmethod
     def send(self):
-        """send loaded packet, return the size of the packet which had been sent"""
+        """send loaded packet (whith the good ethernet checksum in the end of the data payload(to trick wiresharck and take the additional byte into account), return the size of the packet which had been sent"""
         pass
 
     @abc.abstractmethod

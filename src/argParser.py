@@ -46,6 +46,10 @@ class Parser:
 
         parser.add_argument("-s", '--simuled', help="do not send any packet",
                             action="store_true")
+        
+        parser.add_argument("-b", '--bitWise', help="apply ber on every individual bit. Slow",
+                            action="store_true")
+
 
         args = parser.parse_args()
         if args.simuled:

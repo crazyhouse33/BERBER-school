@@ -1,21 +1,16 @@
 import random
 import packets.scapyPacket
+from supervisor import Supervisor
 
 
-class Supervisor:
+class BitWiseSupervisor(Supervisor):
     """Create and use a PacketSender to luanch packet and actually computes statistics"""
 
-    def __init__(self, BER):
-        self.byteCount = 0
-        self.numberOfPacket = 0
-        self.packetFailure = 0
-        self.BER = BER
-
-    def setPacket(self, packet):
-        self.packet = packet
+    def __init__(self, BER)
+        Supervisor(self, BER)
+        self.oldCrc = -1
 
     def send(self):
-        """When using scappy, just send the packet since error will be simulated in the subclasses"""
         # send it once
         self.byteCount += self.packet.send()
         self.numberOfPacket += 1
@@ -28,12 +23,5 @@ class Supervisor:
             else:
                 return
 
-    def chanceOfPacketFailure(self):
-        return 1 - pow(1 - self.BER, self.packet.getSize())
-
-    def getCount(self):
-        return self.byteCount
-
-    def getErrors(self):
-        return self.packetFailure
-
+    def checkError(self, newcrc):
+        return self.oldCrc == newcrc

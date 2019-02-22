@@ -23,7 +23,6 @@ class TrueFileSimulation(Simulation):
 
     def run(self):
         while True:
-            print ("tamere")
             buff = self.fileToSend.read(self.args.payloadSize)
             if not buff:
                 break
