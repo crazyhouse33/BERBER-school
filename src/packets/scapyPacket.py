@@ -1,4 +1,5 @@
 from scapy.all import *
+import crcmod
 
 class ScapyPacket:
 
@@ -13,20 +14,28 @@ class ScapyPacket:
         self.UDP_PORT = 1234
         
         self.payloadSize = len(payload)
-        self.checksumSize = 4
+        self.fcsSize = 0
         
-        self.payload = payload
-        self.size = self.HEADER_SIZE + self.payloadSize + self.checksumSize
+        self.payload = payload # !!! MODIFIED WHEN FRAME IS MANUALLY MODIFIED
+        self.size = self.HEADER_SIZE + self.payloadSize + self.fcsSize
         
-        self.frame = Ether()/IP(dst=self.IP_DST_ADDRESS)/UDP(sport=self.UDP_PORT, dport=self.UDP_PORT)/raw(self.payload + "/fcs")
-
-
+        self.frame = Ether()/IP(dst=self.IP_DST_ADDRESS)/UDP(sport=self.UDP_PORT, dport=self.UDP_PORT)/raw(self.payload)
+        self.fcs = self.calculateFCS()
+        self.frame = self.frame
+        
+    def calculateFCS(self):
+        frame_bytes = bytearray(bytes(str(self.frame), 'ascii'))
+        crc32_func = crcmod.mkCrcFun(0x104c11db7, initCrc=0, xorOut=0xFFFFFFFF)
+        crc_hex = hex(crc32_func(frame_bytes))
+        print("fcs : " + crc_hex)
+        return crc_hex
+        
     def send(self):
         """send loaded packet"""
-        send(self.frame, verbose=False)
+        send(self.frame/raw(self.fcs), verbose=False)
+        print(self.frame/raw(self.fcs))
         return self.size
-
-
+    
     def getSize(self):
         return self.size
     

@@ -1,6 +1,5 @@
 import random
 import string
-import crcmod
 
 from packets.scapyPacket import ScapyPacket
 from simulations.simulation_robin import Simulation_robin
@@ -26,21 +25,17 @@ class RandomSeriesSimulation(Simulation_robin):
         while(i < len(self.splittedData)):
             
             payload = self.splittedData[i]
+            
             packet = ScapyPacket(payload)
+            #print("packet :\n" + str(packet.frame) + "\n")
+            checksumBeforeBER = packet.calculateFCS()
             
-            frame = str(packet.frame)
-            #print("packet :\n" + packet + "\n")
-            checksumBeforeBER = self.calculateFCS(frame)
-            
-            berFrame = self.applyBERonPacket(self.supervisor.ber, frame)
+            berPacket = ScapyPacket(payload)
+            berPacket.frame = self.applyBERonPacket(self.supervisor.ber, str(berPacket.frame))
             #print("BER packet :\n" + berPacket + "\n")
-            checksumAfterBER = self.calculateFCS(berFrame)
-
-
-            #TODO calculate checksum instead
-            #error = (frame != berFrame)
+            checksumAfterBER = berPacket.calculateFCS()
+            
             error = (checksumBeforeBER != checksumAfterBER)
-
             #print("error : " + str(error) + "\n\n")
             
             packet.send()
@@ -70,11 +65,5 @@ class RandomSeriesSimulation(Simulation_robin):
             res.append(nextElement)
             index = index + splitSize
         return res
-
-    def calculateFCS(self, frame):
-        frame_bytes = bytearray(bytes(frame, 'ascii'))
-        crc32_func = crcmod.mkCrcFun(0x104c11db7, initCrc=0, xorOut=0xFFFFFFFF)
-        crc_hex = hex(crc32_func(frame_bytes))
-        return crc_hex
 
     

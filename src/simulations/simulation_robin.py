@@ -34,9 +34,6 @@ class Simulation_robin(abc.ABC):
                 'bytes to send ',
                 
                 self.supervisor.filePath,
-                'bytes:\n\tPacket Sent: ',
-                
-                self.supervisor.filePath,
                 'bytes:\n\tPacket sent: ',
                 
                 self.supervisor.packetCount,
