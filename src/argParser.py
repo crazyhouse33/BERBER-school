@@ -53,7 +53,10 @@ class Parser:
         args = parser.parse_args()
 
         '''TODO : tester la validité des arguments'''
-        self.testargsvalidity(args)
+        if self.checkargsvalidity(args):
+            pass
+        else:
+            exit()
 
         if args.simulated:
             args.filePath = int(args.filePath)
@@ -64,16 +67,21 @@ class Parser:
             print()
         return args
 
-    def testargsvalidity(self, args):
-        self.testbervalidity(args.ber)
-        self.testpayloadsizevalidity(args.payloadSize)
+    def checkargsvalidity(self, args):
+        if self.checkbervalidity(args.ber) \
+                and self.checkpayloadsizevalidity(args.payloadSize):
+            return True
+        else:
+            return False
 
-    def testbervalidity(self, ber):
+    def checkbervalidity(self, ber):
         if ber < 0 or ber > 1:
             print("Error ber not valid, it must be between 0 and 1")
-            exit()
+            return False
+        return True
 
-    def testpayloadsizevalidity(self, payloadSize):
+    def checkpayloadsizevalidity(self, payloadSize):
         if payloadSize < 0 or payloadSize > 1472:
             print("Error payloadSize not valid, it must be between 0 and 1472")
-            exit()
+            return False
+        return True
