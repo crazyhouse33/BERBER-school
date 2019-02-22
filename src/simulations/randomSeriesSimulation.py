@@ -10,12 +10,11 @@ class RandomSeriesSimulation(Simulation_robin):
 
     def __init__(self, supervisor):
         self.supervisor = supervisor
-        self.ber = supervisor.args.ber
         
-        self.dataSize = int(self.supervisor.args.filePath)
+        self.dataSize = int(self.supervisor.filePath)
         self.data = self.createData(self.dataSize)
         
-        self.payloadSize = self.supervisor.args.payloadSize
+        self.payloadSize = self.supervisor.payloadSize
         self.splittedData = self.split(self.data, self.payloadSize)
     
     '''
@@ -23,6 +22,7 @@ class RandomSeriesSimulation(Simulation_robin):
     '''
     def run(self):
         i = 0
+        print("Simulation launched...\n")
         while(i < len(self.splittedData)):
             
             payload = self.splittedData[i]
@@ -32,13 +32,13 @@ class RandomSeriesSimulation(Simulation_robin):
             #print("packet :\n" + packet + "\n")
             checksumBeforeBER = self.calculateFCS(frame)
             
-            berFrame = self.applyBERonPacket(self.ber, frame)
+            berFrame = self.applyBERonPacket(self.supervisor.ber, frame)
             #print("BER packet :\n" + berPacket + "\n")
             checksumAfterBER = self.calculateFCS(berFrame)
 
 
             #TODO calculate checksum instead
-           # error = (frame != berFrame)
+            #error = (frame != berFrame)
             error = (checksumBeforeBER != checksumAfterBER)
 
             #print("error : " + str(error) + "\n\n")

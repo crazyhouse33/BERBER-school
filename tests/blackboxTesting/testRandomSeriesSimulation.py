@@ -3,22 +3,28 @@ import sys
 sys.path.append("../../src/")
 
 from simulations.randomSeriesSimulation import RandomSeriesSimulation
+from supervisor_robin import Supervisor_robin
+from argParser import Parser
 
 
-class testRandomSeriesSimulation(unittest.TestCase) :
+class TestRandomSeriesSimulation(unittest.TestCase) :
     
     def testCreateData(self):
         size = 20
+        supervisor = Supervisor_robin(5, 42, size, 0.001, True, False, True)
+        simul = RandomSeriesSimulation(supervisor)
+    
         print("\nTESTING DATA GENERATION...")
-        simul = RandomSeriesSimulation(0, size, 4)
-        data = simul.createData(size)
-        print("generated data : " + data)
-        self.assertEqual(len(data), size)
+        
+        print("generated data : " + simul.data)
+        self.assertEqual(len(simul.data), size)
         
     def testSplit(self):
+        size = 20
+        supervisor = Supervisor_robin(5, 42, size, 0.001, True, False, True)
+        simul = RandomSeriesSimulation(supervisor)
+    
         print("\nTESTING DATA SPLITTING...")
-        
-        simul = RandomSeriesSimulation(0, 20, 4)
         
         print("data :\n" + simul.data + "\n")
         

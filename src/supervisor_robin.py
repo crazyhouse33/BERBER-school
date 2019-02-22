@@ -3,9 +3,16 @@ import random
 
 class Supervisor_robin:
 
-    def __init__(self, args):
-        self.args = args
-        self.ber = self.args.ber
+    def __init__(self, payloadSize, headerSize, filePath, ber, quiet, simulated, random):
+        self.payloadSize = payloadSize
+        self.headerSize = headerSize
+        self.filePath = filePath
+        self.ber = ber
+        
+        self.quiet = quiet
+        self.simulated = simulated
+        self.random = random
+        
         self.byteCount = 0
         self.packetCount = 0
         self.wrongFrameCount = 0

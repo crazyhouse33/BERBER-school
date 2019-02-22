@@ -23,7 +23,7 @@ class ScapyPacket:
 
     def send(self):
         """send loaded packet"""
-        send(self.frame)
+        send(self.frame, verbose=False)
         return self.size
 
 
