@@ -36,11 +36,12 @@ class Simulation_robin(abc.ABC):
                 self.supervisor.filePath,
                 'bytes:\n\tPacket Sent: ',
                 
-                self.supervisor.args.filePath,
+                self.supervisor.filePath,
                 'bytes:\n\tPacket sent: ',
                 
                 self.supervisor.packetCount,
                 '\n\tPacket failures: ',
+                
                 self.supervisor.wrongFrameCount,
                 "(%.2f" % self.supervisor.computeErrorRate()+'%)',
                 '\n\tTime: ', int(float((timeTaken))), 'ms',
