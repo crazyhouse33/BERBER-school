@@ -51,6 +51,10 @@ class Parser:
                             action="store_true")
 
         args = parser.parse_args()
+
+        '''TODO : tester la validité des arguments'''
+        self.testargsvalidity(args)
+
         if args.simulated:
             args.filePath = int(args.filePath)
         if (args.quiet == False):
@@ -59,3 +63,17 @@ class Parser:
                 print ("\t", arg, ":", args.__dict__[arg])
             print()
         return args
+
+    def testargsvalidity(self, args):
+        self.testbervalidity(args.ber)
+        self.testpayloadsizevalidity(args.payloadSize)
+
+    def testbervalidity(self, ber):
+        if ber < 0 or ber > 1:
+            print("Error ber not valid, it must be between 0 and 1")
+            exit()
+
+    def testpayloadsizevalidity(self, payloadSize):
+        if payloadSize < 0 or payloadSize > 1472:
+            print("Error payloadSize not valid, it must be between 0 and 1472")
+            exit()
