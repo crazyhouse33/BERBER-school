@@ -12,7 +12,7 @@ class SimulationPacket(Packet):
         return self.totalSize
 
     def sendErroned(self):
-        self.send()
+        return self.send()
 
     def getSize(self):
         """return size of the current loaded Packet"""

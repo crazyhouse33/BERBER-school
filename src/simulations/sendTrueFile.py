@@ -22,7 +22,6 @@ class TrueFileSimulation(Simulation):
         super().preRun()
 
     def run(self):
-        numberOfPacket = 0
         while True:
             print ("tamere")
             buff = self.fileToSend.read(self.args.payloadSize)
@@ -30,5 +29,3 @@ class TrueFileSimulation(Simulation):
                 break
             self.packet.setPayload(buff)
             self.supervisor.send()
-            numberOfPacket += 1
-        self.supervisor.numberOfPacket = numberOfPacket

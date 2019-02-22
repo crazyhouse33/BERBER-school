@@ -1,4 +1,4 @@
-import argparse
+from argparse import ArgumentParser
 
 
 class Parser:
@@ -9,7 +9,7 @@ class Parser:
         defaultHS = 16
         defaultFS = 10000
         defaultBER = 0
-        parser = argparse.ArgumentParser(
+        parser = ArgumentParser(
             description='Simulation to observe the trade-of between small/large packet in non negligeable BER environment. Defaults settings for Headers/Payload Size correspond approxymately to UDP over IP over Ethernet scenario')
 
         parser.add_argument(

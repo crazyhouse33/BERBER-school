@@ -21,5 +21,3 @@ class NoPacketSimulation(Simulation):
         if lastSize > 0:
             self.packet.setPacket(lastSize)
             self.supervisor.send()
-            numberOfPacket += 1
-        self.supervisor.numberOfPacket = numberOfPacket

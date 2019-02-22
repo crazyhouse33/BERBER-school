@@ -23,4 +23,4 @@ class Controller:
         self.simulation.terminate()
 
     def IAmRoot(self):
-        return os.geteuid == 0
+        return os.geteuid() == 0
