@@ -6,7 +6,7 @@ class ScapyPacket:
     def __init__(self, payload):
         
         #sizes in bytes
-        self.ETHERNET_HEADER_SIZE  = 14
+        self.ETHERNET_HEADER_SIZE = 14
         self.IP_HEADER_SIZE = 20
         self.UDP_HEADER_SIZE = 8
         self.HEADER_SIZE = self.ETHERNET_HEADER_SIZE + self.IP_HEADER_SIZE + self.UDP_HEADER_SIZE
@@ -19,7 +19,8 @@ class ScapyPacket:
         self.payload = payload # !!! MODIFIED WHEN FRAME IS MANUALLY MODIFIED
         self.size = self.HEADER_SIZE + self.payloadSize + self.fcsSize
         
-        self.frame = Ether()/IP(dst=self.IP_DST_ADDRESS)/UDP(sport=self.UDP_PORT, dport=self.UDP_PORT)/raw(self.payload)
+        self.frame = Ether(dst="ff:ff:ff:ff:ff:ff", src="00:00:00:00:00:00")/IP(dst=self.IP_DST_ADDRESS, src="127.0.0.1")/UDP(sport=self.UDP_PORT, dport=self.UDP_PORT)/raw(self.payload)
+        """/IP(dst=self.IP_DST_ADDRESS)/UDP(sport=self.UDP_PORT, dport=self.UDP_PORT)/raw(self.payload)"""
         self.fcs = self.calculateFCS()
         self.frame = self.frame
         

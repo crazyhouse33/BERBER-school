@@ -1,14 +1,14 @@
 import unittest
-import os
+import sys
 
-os.chdir("../../src/packets")
-from scapyPacket import *
-os.chdir("../../tests/blackboxTesting")
+sys.path.append("../../src/")
+from packets.scapyPacket import ScapyPacket
+sys.path.append("../../tests/blackboxTesting")
 
 
-class TestFrame(unittest.TestCase) :
+class TestFrame(unittest.TestCase):
 
-    def testPacketForging(self) :
+    def testPacketForging(self):
         print("TESTING PACKET FORGING...")
         
         payload = 'THISISTHEPAYLOAD'

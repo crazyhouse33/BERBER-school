@@ -8,6 +8,7 @@ from argParser import Parser
 class testArgParser(unittest.TestCase):
 
     def testcheckbervalidity(self):
+        print("TESTING BER validity...")
         parser = Parser()
         ber = -1
         self.assertFalse(parser.checkbervalidity(ber))
@@ -21,6 +22,7 @@ class testArgParser(unittest.TestCase):
         self.assertTrue(parser.checkbervalidity(ber))
 
     def testcheckpayloadsizevalidity(self):
+        print("TESTING playload size validity...")
         parser = Parser()
         payloadsize = -1
         self.assertFalse(parser.checkpayloadsizevalidity(payloadsize))
