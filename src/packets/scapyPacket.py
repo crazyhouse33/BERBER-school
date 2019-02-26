@@ -28,7 +28,6 @@ class ScapyPacket:
         frame_bytes = bytearray(bytes(str(self.frame), 'ascii'))
         crc32_func = crcmod.mkCrcFun(0x104c11db7, initCrc=0, xorOut=0xFFFFFFFF)
         crc_hex = hex(crc32_func(frame_bytes))
-        print("fcs : " + crc_hex)
         return crc_hex
         
     def send(self):

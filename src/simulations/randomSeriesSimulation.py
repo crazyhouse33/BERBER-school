@@ -29,11 +29,13 @@ class RandomSeriesSimulation(Simulation_robin):
             packet = ScapyPacket(payload)
             #print("packet :\n" + str(packet.frame) + "\n")
             checksumBeforeBER = packet.calculateFCS()
+            print("fcs : " + packet.fcs)
             
             berPacket = ScapyPacket(payload)
             berPacket.frame = self.applyBERonPacket(self.supervisor.ber, str(berPacket.frame))
             #print("BER packet :\n" + berPacket + "\n")
             checksumAfterBER = berPacket.calculateFCS()
+            print("fcs : " + berPacket.fcs)
             
             error = (checksumBeforeBER != checksumAfterBER)
             #print("error : " + str(error) + "\n\n")
