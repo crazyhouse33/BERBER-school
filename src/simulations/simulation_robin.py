@@ -3,9 +3,8 @@ from abc import ABCMeta, abstractmethod  # strange error when removing that
 import time
 import random
 
-
+'''abstract simulation class'''
 class Simulation_robin(abc.ABC):
-    """Abstract class for Simulations, dont forget to set up supervisor.fileSize and number in packet (TODO force that with interface)"""
     
     
     def preRun(self):
