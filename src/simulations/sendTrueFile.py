@@ -17,8 +17,9 @@ class TrueFileSimulation(Simulation):
         except IOError as e:
             print ('Cannot open file', self.args.filePath + ':', e.strerror)
             exit(1)
-
-        self.supervisor.fileSize = os.path.getsize(self.args.filePath)
+        fileSize=os.path.getsize(self.args.filePath)
+        self.supervisor.fileSize = fileSize
+        self. predictedNumberOfPacket= fileSize/self.args.payloadSize
         super().preRun()
 
     def run(self):

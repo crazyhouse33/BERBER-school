@@ -12,11 +12,17 @@ class Simulation(abc.ABC):
         self.args = args
 
     def preRun(self):
+        """extends this to set everything ( predictedNumberOfPacket before starting the timer"""
+        self.progressBar= ProgressBar(self.predictedNumberOfPacket)
         self.startTime = time.time()
 
     @abstractmethod
     def run(self):
         pass
+
+    def getPredictedNumberOfPacket(self):
+        """needed for progress bar, need to set the value in the prerun"""
+        return self.predictedNumberOfPacket
 
     def terminate(self):
         t1 = time.time()

@@ -8,6 +8,14 @@ correspond approxymately to UDP over IP over Ethernet scenario
 ./main.py -h for help
 
 dependencies:
-scapy: pip3 install scapy
-bitstrings: pip3 install bitstrings
+#scapy: 
+pip3 install scapy
+#bitstrings: 
+pip3 install bitstrings
+
+#devStuff:
+#pep8:
+pip3 install pep8
+#unitest:
+pip3 install unitest
 
