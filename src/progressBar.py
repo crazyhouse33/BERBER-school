@@ -17,7 +17,5 @@ class ProgressBar():
         print('\r%s |%s| %s%% %s' % (self.prefix, bar, percent, self.suffix), end = '')
 
         if iteration == self.end: 
-            # Print New Line on Complete
-            print('\n')
             return False
         return True

@@ -13,11 +13,7 @@ class TrueFileSimulation(Simulation):
         Simulation.__init__(self, supervisor, args)
 
     def preRun(self):
-        try:
-            self.fileToSend = open(self.args.filePath, 'r')
-        except IOError as e:
-            print ('Cannot open file', self.args.filePath + ':', e.strerror)
-            exit(1)
+        self.fileToSend = open(self.args.filePath, 'r')
         fileSize=path.getsize(self.args.filePath)
         self.supervisor.fileSize = fileSize
         self.predictedNumberOfPacket= ceil(fileSize/self.args.payloadSize)

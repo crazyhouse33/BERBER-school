@@ -14,7 +14,6 @@ class BitWiseSupervisor(Supervisor):
         self.numberOfPacket += 1
         while True:
                 erroned = self.applyBER()
-                print (erroned)
                 self.byteCount += self.packet.send()
                 if not erroned:
                     break
