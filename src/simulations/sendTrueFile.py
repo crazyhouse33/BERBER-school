@@ -1,7 +1,8 @@
 from packets.scapyPacket import ScapyPacket
 from simulations.simulation import Simulation
 
-import os
+from  os import path
+from math import ceil
 
 
 class TrueFileSimulation(Simulation):
@@ -17,9 +18,9 @@ class TrueFileSimulation(Simulation):
         except IOError as e:
             print ('Cannot open file', self.args.filePath + ':', e.strerror)
             exit(1)
-        fileSize=os.path.getsize(self.args.filePath)
+        fileSize=path.getsize(self.args.filePath)
         self.supervisor.fileSize = fileSize
-        self. predictedNumberOfPacket= fileSize/self.args.payloadSize
+        self.predictedNumberOfPacket= ceil(fileSize/self.args.payloadSize)
         super().preRun()
 
     def run(self):

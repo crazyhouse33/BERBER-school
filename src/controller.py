@@ -3,6 +3,9 @@ from supervisors.supervisor import Supervisor
 from supervisors.bitWiseSupervisor import BitWiseSupervisor
 from simulations.noPacket import NoPacketSimulation
 from simulations.sendTrueFile import TrueFileSimulation
+
+import threading
+import time
 import os
 
 
@@ -23,9 +26,19 @@ class Controller:
             self.simulation = TrueFileSimulation(self.supervisor, args)
 
     def run(self):
+        if (not self.args.quiet):
+            progressBarThread=threading.Thread(name='tamere',target= self.threadFunction)
+            progressBarThread.start()
         self.simulation.preRun()
         self.simulation.run()
+        if (not self.args.quiet):
+            progressBarThread.join()
         self.simulation.terminate()
+
+    def threadFunction(self):
+        while self.simulation.updateBar():
+            time.sleep(0.1)
+
 
     def IAmRoot(self):
         return os.geteuid() == 0
