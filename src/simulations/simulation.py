@@ -32,9 +32,13 @@ class Simulation(abc.ABC):
         """needed for progress bar, need to set the value in the prerun"""
         return self.predictedNumberOfPacket
 
-    def terminate(self):
+    def terminate(self,progressBarThread=None):
         t1 = time.time()
         timeTaken = str(1000 * (t1 - self.startTime))
+
+        #if progressBarThread is running, need to wait him before printing anything
+        if progressBarThread!= None:
+            progressBarThread.join()
         # quiet Mode
         if (self.args.quiet):
             print (

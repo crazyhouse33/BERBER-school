@@ -31,9 +31,11 @@ class Controller:
             progressBarThread.start()
         self.simulation.preRun()
         self.simulation.run()
+        # avoiding progress bar waiting impact on the timer by delagating the join to the simulation 
         if (not self.args.quiet):
-            progressBarThread.join()
-        self.simulation.terminate()
+            self.simulation.terminate(progressBarThread)
+        else:
+            self.simulation.terminate()
 
     def threadFunction(self):
         while self.simulation.updateBar():
