@@ -3,7 +3,6 @@ import sys
 
 sys.path.append("../../src/")
 from packets.scapyPacket import ScapyPacket
-sys.path.append("../../tests/blackboxTesting")
 
 
 class TestFrame(unittest.TestCase):

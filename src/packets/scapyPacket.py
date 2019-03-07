@@ -33,7 +33,7 @@ class ScapyPacket:
     def send(self):
         """send loaded packet"""
         send(self.frame/raw(self.fcs), verbose=False)
-        print(self.frame/raw(self.fcs))
+        #print(self.frame/raw(self.fcs))
         return self.size
     
     def getSize(self):

@@ -18,10 +18,10 @@ class Simulation_robin(abc.ABC):
         t1 = time.time()
         timeTaken = str(1000 * (t1 - self.startTime))
         
-        if (self.supervisor.quiet):
+        if (self.supervisor.controller.quiet):
             print (
-                self.supervisor.filePath,
-                self.supervisor.ber,
+                self.supervisor.controller.data,
+                self.supervisor.controller.ber,
                 self.supervisor.byteCount,
                 timeTaken,
             )
@@ -32,7 +32,7 @@ class Simulation_robin(abc.ABC):
                 self.supervisor.byteCount,
                 'bytes to send ',
                 
-                self.supervisor.filePath,
+                self.supervisor.controller.data,
                 'bytes:\n\tPacket sent: ',
                 
                 self.supervisor.packetCount,
