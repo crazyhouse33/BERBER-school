@@ -12,7 +12,7 @@ class NoPacketSimulation(Simulation):
 
     def preRun(self):
         self.predictedNumberOfPacket, self.lastSize =divmod(
-            supervisor.fileSize, self.payloadSize)
+            self.supervisor.fileSize, self.payloadSize)
         self.cpt=self.predictedNumberOfPacket
         if self.lastSize>0:
             self.predictedNumberOfPacket+=1
