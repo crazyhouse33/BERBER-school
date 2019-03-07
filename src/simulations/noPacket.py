@@ -4,15 +4,15 @@ from simulations.simulation import Simulation
 
 class NoPacketSimulation(Simulation):
 
-    def __init__(self, supervisor, args):
-        self.packet = SimulationPacket(args.headerSize, args.payloadSize)
-        supervisor.fileSize = int(args.filePath)
+    def __init__(self, supervisor, BER, payloadSize, headerSize, fileSize):
+        self.packet = SimulationPacket(headerSize, payloadSize)
+        supervisor.fileSize = fileSize
 
-        Simulation.__init__(self, supervisor, args)
+        Simulation.__init__(self, supervisor, BER, payloadSize )
 
     def preRun(self):
         self.predictedNumberOfPacket, self.lastSize =divmod(
-            int(self.args.filePath), self.args.payloadSize)
+            supervisor.fileSize, self.payloadSize)
         self.cpt=self.predictedNumberOfPacket
         if self.lastSize>0:
             self.predictedNumberOfPacket+=1

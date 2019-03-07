@@ -7,10 +7,11 @@ import time
 class Simulation(abc.ABC):
     """Abstract class for Simulations, dont forget to set up supervisor.fileSize and number in packet (TODO force that with interface)"""
 
-    def __init__(self, supervisor, args):
+    def __init__(self, supervisor, BER, payloadSize):
         supervisor.setPacket(self.packet)
         self.supervisor = supervisor
-        self.args = args
+        self.payloadSize=payloadSize
+        self.BER = BER
         #initialize end to non zero value to avoid thread concurrency fail
         self.progressBar= ProgressBar(1, suffix='Complete')
 
@@ -43,7 +44,7 @@ class Simulation(abc.ABC):
         if (quiet):
             print (
                 self.supervisor.fileSize,
-                self.args.BER,
+                self.BER,
                 self.supervisor.getCount(),
                 timeTaken,
             )

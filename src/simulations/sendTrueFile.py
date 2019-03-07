@@ -7,21 +7,22 @@ from math import ceil
 
 class TrueFileSimulation(Simulation):
 
-    def __init__(self, supervisor, args):
-        self.packet = ScapyPacket(args.headerSize)
+    def __init__(self, supervisor, filePath, BER,  payloadSize):
+        self.filePath=filePath
+        self.packet = ScapyPacket()
 
-        Simulation.__init__(self, supervisor, args)
+        Simulation.__init__(self, supervisor, BER, payloadSize)
 
     def preRun(self):
-        self.fileToSend = open(self.args.filePath, 'r')
-        fileSize=path.getsize(self.args.filePath)
+        self.fileToSend = open(self.filePath, 'r')
+        fileSize=path.getsize(self.filePath)
         self.supervisor.fileSize = fileSize
-        self.predictedNumberOfPacket= ceil(fileSize/self.args.payloadSize)
+        self.predictedNumberOfPacket= ceil(fileSize/self.payloadSize)
         super().preRun()
 
     def run(self):
         while True:
-            buff = self.fileToSend.read(self.args.payloadSize)
+            buff = self.fileToSend.read(self.payloadSize)
             if not buff:
                 break
             self.packet.setPayload(buff)

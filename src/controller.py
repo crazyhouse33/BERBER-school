@@ -19,11 +19,11 @@ class Controller:
             self.supervisor = Supervisor(args.BER, args.delayed)
 
         if (args.simuled):
-            self.simulation = NoPacketSimulation(self.supervisor, args)
+            self.simulation = NoPacketSimulation(self.supervisor, args.BER, args.payloadSize, args.headerSize, int(args.filePath))
         else:
             if not self.IAmRoot():
                 exit("Scapy need root privileges to open raw socket. Exiting.")
-            self.simulation = TrueFileSimulation(self.supervisor, args)
+            self.simulation = TrueFileSimulation(self.supervisor, args.filePath, args.BER, args.payloadSize)
 
     def run(self):
         try:

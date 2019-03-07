@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # An example hook script to verify what is about to be pushed.  Called by "git
 # push" after it has checked the remote status, but before anything has been
@@ -18,7 +18,13 @@
 #
 # This sample shows how to prevent push of commits where the log message starts
 # with "WIP" (work in progress).
-git diff --cached --name-only --diff-filter=ACM | grep '.*\.py' | xargs -I {} bash -c 'echo autoformatting python code: {}; ./autopep8.py --recursive --in-place --aggressive --aggressive {}'
-echo 'Running test. If tests fails, You cant commit'
-./tests/runQuickTests.sh
+
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "master" == "$branch" ]; then
+	git diff --cached --name-only --diff-filter=ACM | grep '.*\.py' | xargs -I {} bash -c 'echo autoformatting python code: {}; ./autopep8.py --recursive --in-place --aggressive --aggressive {}'
+	echo 'Running test. If tests fails, You cant commit'
+	./tests/runQuickTests.sh
+fi
+
 

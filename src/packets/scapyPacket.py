@@ -7,8 +7,7 @@ import sys
 sysorder=sys.byteorder
 class ScapyPacket(Packet):
 
-    def __init__(self, headerSize):
-        self.headerSize = headerSize
+    def __init__(self):
 
         # sizes in bytes
         '''

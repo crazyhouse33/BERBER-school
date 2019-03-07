@@ -10,7 +10,6 @@ class BitWiseSupervisor(Supervisor):
         Supervisor.__init__(self,BER,interFrameDelay)
 
     def send(self):
-        # send it once
         self.numberOfPacket += 1
         while True:
                 erroned = self.applyBER()
