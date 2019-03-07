@@ -1,5 +1,6 @@
 import random
 import packets.scapyPacket
+import time
 
 
 class Supervisor:
@@ -10,6 +11,7 @@ class Supervisor:
         self.numberOfPacket = 0
         self.packetFailure = 0
         self.BER = BER
+        self.sle=0
 
     def setPacket(self, packet):
         self.packet = packet
@@ -26,6 +28,7 @@ class Supervisor:
                 self.packetFailure += 1
             else:
                 self.byteCount += self.packet.send()
+                time.sleep(self.sle)
                 return
 
     def chanceOfPacketFailure(self):
