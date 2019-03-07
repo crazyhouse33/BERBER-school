@@ -30,7 +30,6 @@ class Supervisor:
             else:
                 self.byteCount += self.packet.send()
                 self.afterSend()
-                time.sleep(self.interFrameDelay)
                 return
 
     def afterSend(self):

@@ -22,7 +22,7 @@
 branch=$(git rev-parse --abbrev-ref HEAD)
 
 if [ "master" == "$branch" ]; then
-	git diff --cached --name-only --diff-filter=ACM | grep '.*\.py' | xargs -I {} bash -c 'echo autoformatting python code: {}; ./autopep8.py --recursive --in-place --aggressive --aggressive {}'
+	git diff --cached --name-only --diff-filter=ACM | grep '.*\.py' | xargs -I {} bash -c 'echo autoformatting python code: {}; ./autopep8.py --recursive --in-place --aggressive {}'
 	echo 'Running test. If tests fails, You cant commit'
 	./tests/runQuickTests.sh
 fi

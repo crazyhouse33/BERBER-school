@@ -7,6 +7,7 @@ from simulations.sendTrueFile import TrueFileSimulation
 import threading
 import time
 import os
+import logging
 
 class Controller:
 
@@ -36,7 +37,7 @@ class Controller:
         except BaseException as e:
             self.emergencyStop=True
             progressBarThread.join()
-            print(e)
+            logging.exception(e)
             exit(1)
 
         if (not self.args.quiet):
