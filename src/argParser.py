@@ -8,6 +8,7 @@ class Parser:
         defaultPS = 1454
         defaultHS = 16
         defaultFS = 10000
+        defaultDelay = 0
         defaultBER = 0
         parser = ArgumentParser(
             description='Simulation to observe the trade-of between small/large packet in non negligeable BER environment. Defaults settings for Headers/Payload Size correspond approxymately to UDP over IP over Ethernet scenario')
@@ -40,6 +41,15 @@ class Parser:
             str(defaultBER),
             nargs='?',
             default=defaultBER)
+
+        parser.add_argument(
+            '-d',
+            '--delayed',
+            type=float,
+            help='float specifing a minimum time to wait betwen 2 trames. Default is ' +
+            str(defaultDelay),
+            default=defaultDelay)
+
 
         parser.add_argument("-q", '--quiet', help="decrease output verbosity",
                             action="store_true")

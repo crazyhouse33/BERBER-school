@@ -14,9 +14,9 @@ class Controller:
         self.args = args
         self.emergencyStop=False
         if args.bitWise:
-            self.supervisor = BitWiseSupervisor(args.BER)
+            self.supervisor = BitWiseSupervisor(args.BER, args.delayed)
         else:
-            self.supervisor = Supervisor(args.BER)
+            self.supervisor = Supervisor(args.BER, args.delayed)
 
         if (args.simuled):
             self.simulation = NoPacketSimulation(self.supervisor, args)

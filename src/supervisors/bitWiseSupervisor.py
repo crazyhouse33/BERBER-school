@@ -6,8 +6,8 @@ from supervisors.supervisor import Supervisor
 class BitWiseSupervisor(Supervisor):
     """Create and use a PacketSender to luanch packet and actually computes statistics"""
 
-    def __init__(self, BER):
-        Supervisor.__init__(self,BER)
+    def __init__(self, BER, interFrameDelay):
+        Supervisor.__init__(self,BER,interFrameDelay)
 
     def send(self):
         # send it once
@@ -15,6 +15,7 @@ class BitWiseSupervisor(Supervisor):
         while True:
                 erroned = self.applyBER()
                 self.byteCount += self.packet.send()
+                self.afterSend()
                 if not erroned:
                     break
                 self.packetFailure += 1
