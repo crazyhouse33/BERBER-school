@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from supervisor_robin import Supervisor_robin
+from supervisor import Supervisor
 from simulations.noPacket import NoPacketSimulation
 from simulations.randomSeriesSimulation import RandomSeriesSimulation
 from simulations.sendTrueFile import TrueFileSimulation
@@ -23,7 +23,7 @@ class Controller:
         self.random = random
         
         self.data = self.interpreteData(self.data)
-        self.supervisor = Supervisor_robin(self)
+        self.supervisor = Supervisor(self)
         
         if (self.simulated):
             self.simulation = NoPacketSimulation(self.supervisor)

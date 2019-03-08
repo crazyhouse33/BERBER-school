@@ -2,10 +2,10 @@ import random
 import string
 
 from packets.scapyPacket import ScapyPacket
-from simulations.simulation_robin import Simulation_robin
+from simulations.simulation import Simulation
 
 
-class RandomSeriesSimulation(Simulation_robin):
+class RandomSeriesSimulation(Simulation):
 
     def __init__(self, supervisor):
         self.supervisor = supervisor

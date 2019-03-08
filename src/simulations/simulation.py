@@ -3,15 +3,8 @@ from abc import ABCMeta, abstractmethod  # strange error when removing that
 import time
 import random
 
-
+'''abstract simulation class'''
 class Simulation(abc.ABC):
-    """Abstract class for Simulations, dont forget to set up supervisor.fileSize and number in packet (TODO force that with interface)"""
-    
-    
-    def __init__(self, supervisor, args):
-        supervisor.setPacket(self.packet)
-        self.supervisor = supervisor
-        self.args = args
     
     
     def preRun(self):
@@ -24,28 +17,30 @@ class Simulation(abc.ABC):
     def terminate(self):
         t1 = time.time()
         timeTaken = str(1000 * (t1 - self.startTime))
-        # quiet Mode
         
-        if (self.args.quiet):
+        if (self.supervisor.controller.quiet):
             print (
-                self.supervisor.fileSize,
-                self.args.BER,
-                self.supervisor.getCount(),
+                self.supervisor.controller.data,
+                self.supervisor.controller.ber,
+                self.supervisor.byteCount,
                 timeTaken,
             )
         
         else:
-            errors = self.supervisor.getErrors()
             print(
                 'Simulation terminated. It took',
-                self.supervisor.getCount(),
+                self.supervisor.byteCount,
                 'bytes to send ',
-                self.supervisor.fileSize,
-                'bytes:\n\tPacket Sent: ',
-                self.supervisor.numberOfPacket + errors,
-                '\n\tPacket failure: ',
-                errors,
-                '\n\tTime: ' + timeTaken + 'ms'
+                
+                self.supervisor.controller.data,
+                'bytes:\n\tPacket sent: ',
+                
+                self.supervisor.packetCount,
+                '\n\tPacket failures: ',
+                
+                self.supervisor.wrongFrameCount,
+                "(%.2f" % self.supervisor.computeErrorRate()+'%)',
+                '\n\tTime: ', int(float((timeTaken))), 'ms',
             )
 
 

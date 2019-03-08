@@ -2,35 +2,18 @@ import random
 
 
 class Supervisor:
-    """Create and use a PacketSender to launch packet and actually compute statistics"""
 
-    def __init__(self, ber):
+    def __init__(self, controller):
+        self.controller = controller
+        
         self.byteCount = 0
-        self.packetFailure = 0
-        self.ber = ber
+        self.packetCount = 0
+        self.wrongFrameCount = 0
+        self.timeTaken = 0
 
-    def setPacket(self, packet):
-        self.packet = packet
-
-    def send(self):
-        """When using scapy, just send the packet since error will be simulated in the subclasses"""
-        while True:
-            # send it once
-            self.byteCount += self.packet.send()
-
-            # if failure resend it
-            randFloat = random.uniform(0, 1)
-            if randFloat < self.chanceOfPacketFailure():
-                self.byteCount += self.packet.sendErroned()
-                self.packetFailure += 1
-            else:
-                return
-
-    def chanceOfPacketFailure(self):
-        return 1 - pow(1 - self.ber, self.packet.getSize())
-
-    def getCount(self):
-        return self.byteCount
-
-    def getErrors(self):
-        return self.packetFailure
+    
+    '''
+    compute the total percent of wrong frames
+    '''
+    def computeErrorRate(self):
+        return self.wrongFrameCount / self.packetCount * 100
