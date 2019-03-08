@@ -4,15 +4,16 @@ from simulations.simulation import Simulation
 
 class NoPacketSimulation(Simulation):
 
-    def __init__(self, supervisor, args):
-        self.packet = SimulationPacket(args.headerSize, args.payloadSize)
-        supervisor.fileSize = int(args.filePath)
+    def __init__(self, supervisor):
+        self.supervisor = supervisor
+        self.packet = SimulationPacket(self.supervisor.controller.headerSize, self.supervisor.controller.payloadSize)
+        supervisor.fileSize = int(self.supervisor.controller.data)
 
-        Simulation.__init__(self, supervisor, args)
+        Simulation.__init__(self, supervisor)
 
     def run(self):
         numberOfPacket, lastSize = divmod(
-            int(self.args.filePath), self.args.payloadSize)
+            int(self.supervisor.controller.data), self.supervisor.controller.payloadSize)
         cpt = numberOfPacket
         while cpt > 0:
             cpt -= 1

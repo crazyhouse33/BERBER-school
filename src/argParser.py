@@ -29,7 +29,7 @@ class Parser:
             default=defaultHS)
 
         parser.add_argument(
-            'filePath',
+            'data',
             type=str,
             help='Path to the file to be send. In simulated mode, this argument is the size of the virtual file to be sent.')
 
@@ -59,7 +59,7 @@ class Parser:
             exit()
 
         if args.simulated:
-            args.filePath = int(args.filePath)
+            args.data = int(args.data)
         if (args.quiet == False):
             print("Simulation launched with :\n")
             for arg in sorted(args.__dict__):

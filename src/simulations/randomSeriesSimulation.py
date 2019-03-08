@@ -10,10 +10,10 @@ class RandomSeriesSimulation(Simulation_robin):
     def __init__(self, supervisor):
         self.supervisor = supervisor
         
-        self.dataSize = int(self.supervisor.filePath)
+        self.dataSize = int(self.supervisor.controller.data)
         self.data = self.createData(self.dataSize)
         
-        self.payloadSize = self.supervisor.payloadSize
+        self.payloadSize = self.supervisor.controller.payloadSize
         self.splittedData = self.split(self.data, self.payloadSize)
     
     '''
@@ -21,7 +21,8 @@ class RandomSeriesSimulation(Simulation_robin):
     '''
     def run(self):
         i = 0
-        print("Simulation launched...\n")
+        if(not self.supervisor.controller.quiet):
+            print("Simulation launched...\n")
         while(i < len(self.splittedData)):
             
             payload = self.splittedData[i]
@@ -29,13 +30,13 @@ class RandomSeriesSimulation(Simulation_robin):
             packet = ScapyPacket(payload)
             #print("packet :\n" + str(packet.frame) + "\n")
             checksumBeforeBER = packet.calculateFCS()
-            print("fcs : " + packet.fcs)
+            #print("fcs : " + packet.fcs)
             
             berPacket = ScapyPacket(payload)
-            berPacket.frame = self.applyBERonPacket(self.supervisor.ber, str(berPacket.frame))
+            berPacket.frame = self.applyBERonPacket(self.supervisor.controller.ber, str(berPacket.frame))
             #print("BER packet :\n" + berPacket + "\n")
             checksumAfterBER = berPacket.calculateFCS()
-            print("fcs : " + berPacket.fcs)
+            #print("fcs : " + berPacket.fcs)
             
             error = (checksumBeforeBER != checksumAfterBER)
             #print("error : " + str(error) + "\n\n")
