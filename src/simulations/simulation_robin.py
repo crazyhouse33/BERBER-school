@@ -19,9 +19,10 @@ class Simulation_robin(abc.ABC):
         timeTaken = str(1000 * (t1 - self.startTime))
         
         if (self.supervisor.quiet):
-            print (
+            print(
                 self.supervisor.filePath,
                 self.supervisor.ber,
+                self.supervisor.payloadSize,
                 self.supervisor.byteCount,
                 timeTaken,
             )
