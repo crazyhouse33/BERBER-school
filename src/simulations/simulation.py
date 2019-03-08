@@ -22,6 +22,7 @@ class Simulation(abc.ABC):
             print (
                 self.supervisor.controller.data,
                 self.supervisor.controller.ber,
+                self.supervisor.controller.payloadSize,
                 self.supervisor.byteCount,
                 timeTaken,
             )
