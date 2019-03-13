@@ -60,6 +60,11 @@ class Parser:
         parser.add_argument("-b", '--bitWise', help="apply ber on every individual bit. Slow",
                             action="store_true")
 
+        parser.add_argument("-rf", '--randomF', help="send random characters generated on the fly",
+                            action="store_true")
+
+        parser.add_argument("-r", '--random', help="send random characters",
+                            action="store_true")
 
         args = parser.parse_args()
         if args.simuled:

@@ -9,22 +9,9 @@ class ScapyPacket(Packet):
 
     def __init__(self):
 
-        # sizes in bytes
-        '''
-            self.ETHERNET_HEADER_SIZE = 14
-            self.IP_HEADER_SIZE = 20
-            self.UDP_HEADER_SIZE = 8
-            self.HEADER_SIZE = self.ETHERNET_HEADER_SIZE + \
-                self.IP_HEADER_SIZE + self.UDP_HEADER_SIZE
-
-
-            self.payloadSize = len(payload)
-            self.checksumSize = 4
-            '''
         self.IP_DST_ADDRESS = "127.0.0.1"
         self.UDP_PORT = 12349
-        self.baseTrame = Ether() / IP(dst=self.IP_DST_ADDRESS) / \
-            UDP(sport=self.UDP_PORT, dport=self.UDP_PORT + 1)
+        self.baseTrame = BitArray(bytes( Ether() / IP(dst=self.IP_DST_ADDRESS) / UDP(sport=self.UDP_PORT, dport=self.UDP_PORT + 1)))
 
         self.crc32_func = crcmod.mkCrcFun(
             0x104c11db7,
@@ -53,18 +40,14 @@ class ScapyPacket(Packet):
         self.flippedBit=[]
         self.payloadSize = len(payload)
         payload = Raw(load=payload)
-        self.trame = BitArray(  # translate the whole trame to binary
-            bytes(
-                self.baseTrame /
-                payload
-            )
-        )
-        self.computeTotalSize()
+        self.trame = BitArray(self.baseTrame)
+        self.trame.append( BitArray(bytes(payload)) )
         self.initialCheckSum = self.getFCS()
 
 #        print ("before check:",self.trame, "check=", self.initialCheckSum)
         self.trame.append(BitArray(self.initialCheckSum.to_bytes(4, sysorder)))
 #       print ("after check:",self.trame)
+        self.computeTotalSize()
         return self.initialCheckSum
 
     def getFCS(self):

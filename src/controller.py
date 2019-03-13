@@ -3,6 +3,9 @@ from supervisors.supervisor import Supervisor
 from supervisors.bitWiseSupervisor import BitWiseSupervisor
 from simulations.noPacket import NoPacketSimulation
 from simulations.sendTrueFile import TrueFileSimulation
+from simulations.randomSimulation import RandomSimulation
+from simulations.randomOnFlySimulation import RandomOnFlySimulation
+import simulations
 
 import threading
 import time
@@ -24,7 +27,12 @@ class Controller:
         else:
             if not self.IAmRoot():
                 exit("Scapy need root privileges to open raw socket. Exiting.")
-            self.simulation = TrueFileSimulation(self.supervisor, args.filePath, args.BER, args.payloadSize)
+            if args.randomF:
+                self.simulation = RandomOnFlySimulation(self.supervisor, args.BER, args.payloadSize, args.headerSize, int(args.filePath))
+            elif args.random:
+                self.simulation = RandomSimulation(self.supervisor, args.BER, args.payloadSize, args.headerSize, int(args.filePath))
+            else:
+                self.simulation = TrueFileSimulation(self.supervisor, args.filePath, args.BER, args.payloadSize)
 
     def run(self):
         try:
