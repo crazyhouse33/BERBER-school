@@ -37,7 +37,7 @@ class Controller:
     def run(self):
         try:
             if (not self.args.quiet):
-                progressBarThread=threading.Thread(name='tamere',target= self.threadFunction)
+                progressBarThread=threading.Thread(name='progressBarThread',target= self.threadFunction)
                 progressBarThread.start()
             self.simulation.preRun()
             self.simulation.run()

@@ -17,11 +17,12 @@ class NoPacketSimulation(Simulation):
         if self.lastSize>0:
             self.predictedNumberOfPacket+=1
         Simulation.preRun(self)
+
     def run(self):
         while self.cpt > 0:
             self.cpt -= 1
             self.supervisor.send()
         # send last packet
         if self.lastSize > 0:
-            self.packet.setPacket(self.lastSize)
+            self.packet.setPayload(self.lastSize)
             self.supervisor.send()

@@ -1,4 +1,4 @@
-from packets.scapyPacket import ScapyPacket
+from packets.scapySender import ScapySender
 from simulations.simulation import Simulation
 
 from  os import path
@@ -9,7 +9,7 @@ class TrueFileSimulation(Simulation):
 
     def __init__(self, supervisor, filePath, BER,  payloadSize):
         self.filePath=filePath
-        self.packet = ScapyPacket()
+        self.packet = ScapySender()
 
         Simulation.__init__(self, supervisor, BER, payloadSize)
 
@@ -25,5 +25,4 @@ class TrueFileSimulation(Simulation):
             buff = self.fileToSend.read(self.payloadSize)
             if not buff:
                 break
-            self.packet.setPayload(buff)
-            self.supervisor.send()
+            self.supervisor.setAndSend(buff)

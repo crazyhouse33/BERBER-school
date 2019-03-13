@@ -1,4 +1,4 @@
-from packets.scapyPacket import ScapyPacket
+from packets.scapySender import ScapySender
 from simulations.simulation import Simulation
 import string
 import random
@@ -7,7 +7,7 @@ import random
 class RandomOnFlySimulation(Simulation):
 
     def __init__(self, supervisor, BER, payloadSize, headerSize, fileSize):
-        self.packet = ScapyPacket()
+        self.packet = ScapySender()
         supervisor.fileSize = fileSize
 
         Simulation.__init__(self, supervisor, BER, payloadSize)
@@ -23,12 +23,10 @@ class RandomOnFlySimulation(Simulation):
     def run(self):
         while self.cpt > 0:
             self.cpt -= 1
-            self.packet.setPayload(self.getRandomString(self.payloadSize))
-            self.supervisor.send()
+            self.supervisor.setAndSend(self.getRandomString(self.payloadSize))
         # send last packet
         if self.lastSize > 0:
-            self.packet.setPayload(self.getRandomString(self.lastSize))
-            self.supervisor.send()
+            self.supervisor.setAndSend(self.getRandomString(self.lastSize))
 
     def getRandomString(self, sizeOfString):
         data = ""

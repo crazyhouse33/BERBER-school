@@ -2,10 +2,8 @@ from scapy.all import Raw, Ether, IP, UDP, sendp
 from packets.packet import Packet
 from bitstring import BitArray
 import crcmod
-import sys
 
-sysorder=sys.byteorder
-class ScapyPacket(Packet):
+class ScapySender(Packet):
 
     def __init__(self):
 
@@ -45,7 +43,7 @@ class ScapyPacket(Packet):
         self.initialCheckSum = self.getFCS()
 
 #        print ("before check:",self.trame, "check=", self.initialCheckSum)
-        self.trame.append(BitArray(self.initialCheckSum.to_bytes(4, sysorder)))
+        self.trame.append(BitArray(self.initialCheckSum.to_bytes(4, 'little')))
 #       print ("after check:",self.trame)
         self.computeTotalSize()
         return self.initialCheckSum

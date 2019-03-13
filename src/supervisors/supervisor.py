@@ -1,5 +1,4 @@
 import random
-import packets.scapyPacket
 import time
 
 
@@ -31,11 +30,13 @@ class Supervisor:
                 self.byteCount += self.packet.send()
                 self.afterSend()
                 return
+    def setAndSend(self, payload):
+        """Syntaxic sugar to mask the machine of state nature of the Sender class"""
+        self.packet.setPayload(payload)
+        self.send()
 
     def afterSend(self):
         time.sleep(self.interFrameDelay)
-
-
 
     def chanceOfPacketFailure(self):
         return 1 - pow(1 - self.BER, self.packet.getSize())

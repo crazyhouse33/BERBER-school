@@ -1,7 +1,7 @@
 import random
 import string
 
-from packets.scapyPacket import ScapyPacket
+from packets.scapySender import ScapySender
 from simulations.randomOnFlySimulation import RandomOnFlySimulation
 
 
@@ -21,8 +21,7 @@ class RandomSimulation(RandomOnFlySimulation):
     def run(self):
         for i in range(len(self.splittedData)):
             payload = self.splittedData[i]
-            self.packet.setPayload(payload)
-            self.supervisor.send()
+            self.supervisor.setAndSend(payload)
 
 
     '''turn a series of data into an array of strings of size splitSize

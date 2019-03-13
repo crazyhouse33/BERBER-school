@@ -1,5 +1,4 @@
 import random
-import packets.scapyPacket
 from supervisors.supervisor import Supervisor
 
 

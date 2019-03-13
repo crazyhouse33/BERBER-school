@@ -14,10 +14,9 @@ class Packet(abc.ABC):
         """send an erroned packet, return the size of the packet which had been sent"""
         pass
 
-    @abc.abstractmethod
     def getSize(self):
         """return size of the current loaded Packet"""
-        pass
+        return self.totalSize
 
     def computeTotalSize(self):
         self.totalSize = self.payloadSize + self.headerSize
