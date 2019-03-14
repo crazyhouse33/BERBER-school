@@ -8,7 +8,6 @@ sys.path.append("./src/")
 parser = Parser()
 args = parser.parse()
 
-controller = Controller(args.payloadSize, args.headerSize,
-                        args.data, args.ber, 
-                        args.quiet, args.simulated, args.random)
+
+controller = Controller(args.ber, args.delayed, args.payloadSize, args.headerSize, args.data, args.bitWise, args.randomF, args.random, args.simulated, args.quiet)
 controller.run()

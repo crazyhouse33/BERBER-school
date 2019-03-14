@@ -14,29 +14,29 @@ import logging
 
 class Controller:
 
-    def __init__(self, args):
-        self.args = args
+    def __init__(self, ber, delayed, payloadSize, headerSize, data, bitWise, randomf, random, simulated, quiet):
         self.emergencyStop=False
-        if args.bitWise:
-            self.supervisor = BitWiseSupervisor(args.BER, args.delayed)
+        self.quiet=quiet
+        if bitWise:
+            self.supervisor = BitWiseSupervisor(ber, delayed)
         else:
-            self.supervisor = Supervisor(args.BER, args.delayed)
+            self.supervisor = Supervisor(ber, delayed)
 
-        if (args.simuled):
-            self.simulation = NoPacketSimulation(self.supervisor, args.BER, args.payloadSize, args.headerSize, int(args.filePath))
+        if (simulated):
+            self.simulation = NoPacketSimulation(self.supervisor, ber, payloadSize, headerSize, data)
         else:
             if not self.IAmRoot():
                 exit("Scapy need root privileges to open raw socket. Exiting.")
-            if args.randomF:
-                self.simulation = RandomOnFlySimulation(self.supervisor, args.BER, args.payloadSize, args.headerSize, int(args.filePath))
-            elif args.random:
-                self.simulation = RandomSimulation(self.supervisor, args.BER, args.payloadSize, args.headerSize, int(args.filePath))
+            if randomf:
+                self.simulation = RandomOnFlySimulation(self.supervisor, ber, payloadSize, headerSize, data)
+            elif random:
+                self.simulation = RandomSimulation(self.supervisor, ber, payloadSize, headerSize, data)
             else:
-                self.simulation = TrueFileSimulation(self.supervisor, args.filePath, args.BER, args.payloadSize)
+                self.simulation = TrueFileSimulation(self.supervisor, data, ber, payloadSize)
 
     def run(self):
         try:
-            if (not self.args.quiet):
+            if (not self.quiet):
                 progressBarThread=threading.Thread(name='progressBarThread',target= self.threadFunction)
                 progressBarThread.start()
             self.simulation.preRun()
@@ -48,7 +48,7 @@ class Controller:
             logging.exception(e)
             exit(1)
 
-        if (not self.args.quiet):
+        if (not self.quiet):
             self.simulation.terminate(progressBarThread,quiet=False)
         else:
             self.simulation.terminate(quiet=True)
