@@ -5,13 +5,13 @@ class Parser:
     """parse the arguments, TODO make only fileSize positional"""
 
     def parse(self):
-        defaultPS = 1454
+        defaultPS = 1472
         defaultHS = 16
         defaultFS = 10000
         defaultDelay = 0
         defaultBER = 0
         parser = ArgumentParser(
-            description='Simulation to observe the trade-of between small/large packet in non negligeable BER environment. Defaults settings for Headers/Payload Size correspond approxymately to UDP over IP over Ethernet scenario')
+            description='Simulation to observe the trade-off between small/large packet in non negligeable BER environment. Default settings for Headers/Payload Size correspond to UDP over IP over Ethernet scenario')
 
         parser.add_argument(
             '-P',
@@ -30,12 +30,12 @@ class Parser:
             default=defaultHS)
 
         parser.add_argument(
-            'filePath',
+            'data',
             type=str,
-            help='Path to the file to be send. In simuled mode, this argument is the size of the virtual file to be sent.')
+            help='Path to the file to be send. In simulated mode, this argument is the size of the virtual file to be sent. a letter \'G\', \'M\' or \'K\' can be appended to specify a unit')
 
         parser.add_argument(
-            'BER',
+            'ber',
             type=float,
             help='float specifing the BER of the virtual network connexion. Default is ' +
             str(defaultBER),
@@ -54,24 +54,82 @@ class Parser:
         parser.add_argument("-q", '--quiet', help="decrease output verbosity",
                             action="store_true")
 
-        parser.add_argument("-s", '--simuled', help="do not send any packet",
-                            action="store_true")
-        
-        parser.add_argument("-b", '--bitWise', help="apply ber on every individual bit. Slow",
+        parser.add_argument("-s", '--simulated', help="do not send any packet",
                             action="store_true")
 
         parser.add_argument("-rf", '--randomF', help="send random characters generated on the fly",
                             action="store_true")
 
-        parser.add_argument("-r", '--random', help="send random characters",
+        parser.add_argument("-r", '--random', help="send a randomly generated series of Bytes",
                             action="store_true")
 
-        args = parser.parse_args()
-        if args.simuled:
-            args.filePath = int(args.filePath)
-        if (args.quiet == False):
+        self.args = parser.parse_args()
+        
+        if not self.checkargsvalidity():
+            exit(1)
+        
+        if self.args.simulated or self.args.random or self.args.randomF:
+            self.args.data = self.interpreteData(self.args.data)
+        if (self.args.quiet == False):
             print("Simulation launched with :\n")
-            for arg in sorted(args.__dict__):
-                print ("\t", arg, ":", args.__dict__[arg])
+            for arg in sorted(self.args.__dict__):
+                print ("\t", arg, ":", self.args.__dict__[arg])
             print()
-        return args
+        return self.args
+        
+    
+    '''
+    return the effective value of data, after interpreting it with format <int><G/M/K>
+    for gigabytes, megabytes, kilobytes or bytes
+    '''
+    def interpreteData(self, data):
+        unit = data[-1]
+        if (unit.isdigit()): #no letter in the end
+            return int(data)
+        prefix = int(data[:-1])
+        if (unit == 'G'):
+            return prefix * 1000000000
+        if (unit == 'M'):
+            return prefix * 1000000
+        if (unit == 'K'):
+            return prefix * 1000
+        else:
+            return -1
+    
+    
+    
+    ''' CHECKING OF ARGS VALIDITY '''
+    
+    def checkargsvalidity(self):
+        if self.args.random:
+                if self.checkbervalidity(self.args.ber)\
+                        and self.checkpayloadsizevalidity(self.args.payloadSize)\
+                        and self.checkrandomdatavalidity(self.args.data):
+                    return True
+                else:
+                    return False
+        elif self.args.simulated:
+            if self.checkbervalidity(self.args.ber) \
+                    and self.checkpayloadsizevalidity(self.args.payloadSize):
+                return True
+            else:
+                return False
+
+    def checkrandomdatavalidity(self, data):
+        print(data)
+        if data < 0:
+            print("Error data not valid, it must be a positive integer")
+            return False
+        return True
+
+    def checkbervalidity(self, ber):
+        if ber < 0 or ber > 1:
+            print("Error ber not valid, it must be between 0 and 1")
+            return False
+        return True
+
+    def checkpayloadsizevalidity(self, payloadSize):
+        if payloadSize < 0 or payloadSize > 1472:
+            print("Error payloadSize not valid, it must be between 0 and 1472")
+            return False
+        return True
