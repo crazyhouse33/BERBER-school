@@ -64,9 +64,7 @@ class Parser:
                             action="store_true")
 
         self.args = parser.parse_args()
-        
-        if not self.checkargsvalidity():
-            exit(1)
+
         
         if self.args.simulated or self.args.random or self.args.randomF:
             self.args.data = self.interpreteData(self.args.data)
@@ -99,37 +97,3 @@ class Parser:
     
     
     ''' CHECKING OF ARGS VALIDITY '''
-    
-    def checkargsvalidity(self):
-        if self.args.random:
-                if self.checkbervalidity(self.args.ber)\
-                        and self.checkpayloadsizevalidity(self.args.payloadSize)\
-                        and self.checkrandomdatavalidity(self.args.data):
-                    return True
-                else:
-                    return False
-        elif self.args.simulated:
-            if self.checkbervalidity(self.args.ber) \
-                    and self.checkpayloadsizevalidity(self.args.payloadSize):
-                return True
-            else:
-                return False
-
-    def checkrandomdatavalidity(self, data):
-        print(data)
-        if data < 0:
-            print("Error data not valid, it must be a positive integer")
-            return False
-        return True
-
-    def checkbervalidity(self, ber):
-        if ber < 0 or ber > 1:
-            print("Error ber not valid, it must be between 0 and 1")
-            return False
-        return True
-
-    def checkpayloadsizevalidity(self, payloadSize):
-        if payloadSize < 0 or payloadSize > 1472:
-            print("Error payloadSize not valid, it must be between 0 and 1472")
-            return False
-        return True

@@ -9,7 +9,9 @@ class TestRandomSimulation(unittest.TestCase) :
     
     def testCreateData(self):
         size = 20
-        supervisor = BitWiseSupervisor(0, 0)
+        BER = 0
+        interFrameDelay = 0
+        supervisor = BitWiseSupervisor(BER, interFrameDelay)
         simul = RandomSimulation(supervisor, supervisor.BER, 10, 42, size)
         simul.data = simul.getRandomString(size)
         print("\nTESTING DATA GENERATION...")
