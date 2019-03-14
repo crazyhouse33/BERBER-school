@@ -31,7 +31,7 @@ for (( i=200;i<=1476;i+=$step)); do
 	echo $results$'\r' >> results.txt
 done
 
-gnuplot -p -e "plot 'results.txt' u 3:5 w l"
+gnuplot -p -e "plot 'results.txt' u 3:4 w l"
 
 echo "done!"
 

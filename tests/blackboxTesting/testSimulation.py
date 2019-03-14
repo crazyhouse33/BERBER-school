@@ -3,7 +3,8 @@ import sys
 
 sys.path.append("../../src/")
 
-from supervisor_robin import Supervisor_robin
+from controller import Controller
+from supervisor import Supervisor
 from simulations.randomSeriesSimulation import RandomSeriesSimulation
 
 class TestSimulation(unittest.TestCase):
@@ -11,7 +12,7 @@ class TestSimulation(unittest.TestCase):
     def testBERonByte(self):
         print("TESTING BERonByte...")
         size = 20
-        supervisor = Supervisor_robin(5, 42, size, 0.001, True, False, True)
+        supervisor = Supervisor(Controller(5, 42, "20", 0, True, False, True))
         simul = RandomSeriesSimulation(supervisor)
         data = "o"
         data_bytes = bytes(data, 'utf-8')

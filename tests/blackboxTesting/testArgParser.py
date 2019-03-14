@@ -4,36 +4,39 @@ import sys
 sys.path.append("../../src/")
 
 from argParser import Parser
+from controller import Controller
 
 class testArgParser(unittest.TestCase):
 
     def testcheckbervalidity(self):
         print("TESTING BER validity...")
-        parser = Parser()
+        controller = Controller(5, 42, "20", 0, True, False, True)
+        #parser = Parser()
         ber = -1
-        self.assertFalse(parser.checkbervalidity(ber))
+        self.assertFalse(controller.checkbervalidity(ber))
         ber = 121921
-        self.assertFalse(parser.checkbervalidity(ber))
+        self.assertFalse(controller.checkbervalidity(ber))
         ber = 0
-        self.assertTrue(parser.checkbervalidity(ber))
+        self.assertTrue(controller.checkbervalidity(ber))
         ber = 1
-        self.assertTrue(parser.checkbervalidity(ber))
+        self.assertTrue(controller.checkbervalidity(ber))
         ber = 0.00043
-        self.assertTrue(parser.checkbervalidity(ber))
+        self.assertTrue(controller.checkbervalidity(ber))
 
     def testcheckpayloadsizevalidity(self):
         print("TESTING playload size validity...")
-        parser = Parser()
+        controller = Controller(5, 42, "20", 0, True, False, True)
+        #parser = Parser()
         payloadsize = -1
-        self.assertFalse(parser.checkpayloadsizevalidity(payloadsize))
+        self.assertFalse(controller.checkpayloadsizevalidity(payloadsize))
         payloadsize = 1600
-        self.assertFalse(parser.checkpayloadsizevalidity(payloadsize))
+        self.assertFalse(controller.checkpayloadsizevalidity(payloadsize))
         payloadsize = 0
-        self.assertTrue(parser.checkpayloadsizevalidity(payloadsize))
+        self.assertTrue(controller.checkpayloadsizevalidity(payloadsize))
         payloadsize = 1
-        self.assertTrue(parser.checkpayloadsizevalidity(payloadsize))
+        self.assertTrue(controller.checkpayloadsizevalidity(payloadsize))
         payloadsize = 20
-        self.assertTrue(parser.checkpayloadsizevalidity(payloadsize))
+        self.assertTrue(controller.checkpayloadsizevalidity(payloadsize))
 
 if __name__ == '__main__':
     unittest.main()

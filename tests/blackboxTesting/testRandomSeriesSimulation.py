@@ -3,7 +3,8 @@ import sys
 sys.path.append("../../src/")
 
 from simulations.randomSeriesSimulation import RandomSeriesSimulation
-from supervisor_robin import Supervisor_robin
+from controller import Controller
+from supervisor import Supervisor
 from argParser import Parser
 
 
@@ -11,7 +12,7 @@ class TestRandomSeriesSimulation(unittest.TestCase) :
     
     def testCreateData(self):
         size = 20
-        supervisor = Supervisor_robin(5, 42, size, 0.001, True, False, True)
+        supervisor = Supervisor(Controller(5, 42, str(size), 0, True, False, True))
         simul = RandomSeriesSimulation(supervisor)
     
         print("\nTESTING DATA GENERATION...")
@@ -25,9 +26,9 @@ class TestRandomSeriesSimulation(unittest.TestCase) :
         '''
         case size % payloadLength = 0
         '''
-        size = 100
         payloadLength = 5
-        supervisor = Supervisor_robin(payloadLength, 42, size, 0.001, True, False, True)
+        size = 100
+        supervisor = Supervisor(Controller(payloadLength, 42, str(size), 0, True, False, True))
         simul = RandomSeriesSimulation(supervisor)
         
         print("data :\n" + simul.data + "\n")
@@ -48,7 +49,7 @@ class TestRandomSeriesSimulation(unittest.TestCase) :
         '''
         size = 100
         payloadLength = 6
-        supervisor = Supervisor_robin(payloadLength, 42, size, 0.001, True, False, True)
+        supervisor = Supervisor(Controller(payloadLength, 42, str(size), 0.001, True, False, True))
         simul = RandomSeriesSimulation(supervisor)
         
         print("data :\n" + simul.data + "\n")
