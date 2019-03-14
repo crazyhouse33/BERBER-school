@@ -11,7 +11,7 @@ class TestBlackBox(unittest.TestCase):
         # udp over ip over ethernet case
         self.blackBoxTest(
             '../../src/main.py -q -s 10000 0',
-            '10000 0.0 10112 ' +
+            '10000 0.0 10294 ' +
             anyFloat)
 
         self.blackBoxTest(
