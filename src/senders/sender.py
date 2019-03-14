@@ -1,8 +1,11 @@
 import abc
 
 
-class Packet(abc.ABC):
+class Sender(abc.ABC):
     """Abstract class for each packets"""
+
+    def __init__(self, headerSize):
+        self.headerSize=headerSize
 
     @abc.abstractmethod
     def send(self):

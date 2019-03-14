@@ -1,17 +1,14 @@
 import random
 import string
 
-from packets.scapySender import ScapySender
 from simulations.randomOnFlySimulation import RandomOnFlySimulation
 
 
 class RandomSimulation(RandomOnFlySimulation):
-    """Same as RandomSimulation but do not generate random data on the fly, since the legends says it bother the client. Only God know why.
-    We dont directely iterate over the string, but rather over an array of the splitted string. This is a other "Feature" asked by the client.
-    """
 
-    def __init__(self, supervisor, BER, payloadSize, headerSize, fileSize):
-        super().__init__( supervisor, BER, payloadSize, headerSize, fileSize)
+    def __init__(self, supervisor, fileSize, payloadSize):
+        super().__init__( supervisor, fileSize, payloadSize)
+
         data = self.getRandomString(fileSize)
         self.splittedData = self.split(data, payloadSize)
 

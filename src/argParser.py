@@ -10,6 +10,9 @@ class Parser:
         defaultFS = 10000
         defaultDelay = 0
         defaultBER = 0
+        defaultScenario= 'file'
+        defaultSupervisor= 'bit'
+        defaultMode='scapy'
         parser = ArgumentParser(
             description='Simulation to observe the trade-off between small/large packet in non negligeable BER environment. Default settings for Headers/Payload Size correspond to UDP over IP over Ethernet scenario')
 
@@ -29,18 +32,7 @@ class Parser:
             str(defaultHS),
             default=defaultHS)
 
-        parser.add_argument(
-            'data',
-            type=str,
-            help='data to send. In simulated/random scenario, this argument is the size of the virtual file to be sent. a letter \'G\', \'M\' or \'K\' can be appended to specify a unit')
 
-        parser.add_argument(
-            'ber',
-            type=float,
-            help='float specifing the BER of the virtual network connexion. Default is ' +
-            str(defaultBER),
-            nargs='?',
-            default=defaultBER)
 
         parser.add_argument(
             '-d',
@@ -56,8 +48,8 @@ class Parser:
             '--scenario',
             type=str,
             help='string specifing wich scenario will be done. Default is Sending a file' +
-            str(defaultPS),
-            default=defaultPS,
+            defaultScenario,
+            default=defaultScenario,
             choices= ['file', 'string', 'random', 'randomF']
             )
 
@@ -66,8 +58,8 @@ class Parser:
             '--mode',
             type=str,
             help='string specifying the way packet are lunched. Default use scapy implementation' +
-            str(defaultPS),
-            default=defaultPS,
+            defaultMode,
+            default=defaultMode,
             choices= ['scapy', 'socket', 'simulated']
             )
 
@@ -76,9 +68,9 @@ class Parser:
             '-e',
             '--supervisor',
             type=str,
-            help='string switching the way erros are simulated. Default is bitWise' +
-            str(defaultPS),
-            default=defaultPS,
+            help='string switching the way errors are simulated. Default is bitWise' +
+            defaultSupervisor,
+            default=defaultSupervisor,
             choices= ['bit', 'packet']
             )
 
@@ -88,74 +80,72 @@ class Parser:
         parser.add_argument("-q", '--quiet', help="decrease output verbosity",
                             action="store_true")
 
+        parser.add_argument(
+            'data',
+            type=str,
+            help='data to send. In simulated/random scenario, this argument is the size of the virtual file to be sent. a letter \'G\', \'M\' or \'K\' can be appended to specify a unit')
+
+        parser.add_argument(
+            'ber',
+            type=float,
+            help='float specifing the BER of the virtual network connexion. Default is ' +
+            str(defaultBER),
+            nargs='?',
+            default=defaultBER)
+
 
         self.args = parser.parse_args()
-        
-        
-        if self.args.scenario or self.args.random or self.args.randomF:
-            self.args.data = self.interpreteData(self.args.data)
+
+        self.interpreteData()
+
+        self.checkPayloadSize()
+        self.checkData()
+        self.checkPayloadSize()
+        self.checkConflicts()
+
         if (self.args.quiet == False):
             print("Simulation launched with :\n")
-            for arg in sorted(self.args.__dict__):
+            for arg in sorted(self.args.__dict__):#need to sort it otherwise the order is not determinist
                 print ("\t", arg, ":", self.args.__dict__[arg])
             print()
         return self.args
         
+    def checkConflicts(self):
+        print (self.args.scenario, self.args.supervisor)
+        if self.args.mode=='simulated' and self.args.supervisor=='bit':
+            self.args.supervisor='packet'
+            print ('WARNING: regled conflict: simulated only made sense used with the packet supervisor')
     
     '''
     return the effective value of data, after interpreting it with format <int><G/M/K>
     for gigabytes, megabytes, kilobytes or bytes
     '''
-    def interpreteData(self, data):
-        unit = data[-1]
-        if (unit.isdigit()): #no letter in the end
-            return int(data)
-        prefix = int(data[:-1])
-        if (unit == 'G'):
-            return prefix * 1000000000
-        if (unit == 'M'):
-            return prefix * 1000000
-        if (unit == 'K'):
-            return prefix * 1000
-        else:
-            return -1
-    
-    
-    
-    
-
-''' CHECKING ARGS VALIDITY '''
-    
-    def checkargsvalidity(self):
-        if self.args.random:
-                if self.checkbervalidity(self.args.ber)\
-                        and self.checkpayloadsizevalidity(self.args.payloadSize)\
-                        and self.checkrandomdatavalidity(self.args.data):
-                    return True
-                else:
-                    return False
-        elif self.args.simulated:
-            if self.checkbervalidity(self.args.ber) \
-                    and self.checkpayloadsizevalidity(self.args.payloadSize):
-                return True
+    def interpreteData(self):
+        if self.args.scenario== 'simulated' or self.args.scenario =='random' or self.args.scenario=='randomF':#if simulation just need a number
+            unit = self.args.data[-1]
+            prefix = int(self.args.data[:-1])
+            if (unit.isdigit()): #if digit in the end
+                self.args.data= int(self.args.data)
+            elif (unit == 'G'):
+                self.args.data = prefix * 1000000000
+            elif (unit == 'M'):
+                self.args.data= prefix * 1000000
+            elif (unit == 'K'):
+                self.args.data = prefix * 1000
             else:
-                return False
+                exit('Bad unit format: use G|M|K')
+                
 
-    def checkrandomdatavalidity(self, data):
-        print(data)
-        if data < 0:
-            print("Error data not valid, it must be a positive integer")
-            return False
-        return True
+    def checkData(self):
+        if type(self.args.data) is int:
+            if self.args.data < 0:
+                exit("Error: data is not valid, it must be a positive integer")
+        #TODO else open file, and transmit it in data (simulation dont need to manage opening file anymore)
 
-    def checkbervalidity(self, ber):
-        if ber < 0 or ber > 1:
-            print("Error ber not valid, it must be between 0 and 1")
-            return False
-        return True
+    def checkBer(self):
+        if self.args.ber < 0 or ber > 1:
+            exit("Error: BER is not valid. Must a float between 0 and 1")
 
-    def checkpayloadsizevalidity(self, payloadSize):
-        if payloadSize < 0 or payloadSize > 1472:
-            print("Error payloadSize not valid, it must be between 0 and 1472")
-            return False
-        return True
+    def checkPayloadSize(self):
+        if self.args.payloadSize < 0 :
+            exit("Error: payloadSize is not valid, it must be a positive integer")

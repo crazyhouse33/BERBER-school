@@ -1,7 +1,7 @@
 from scapy.all import Raw
-from packets.scapyPacket import ScapyPacket
+from senders.scapySender import ScapySender
 import socket
-class SocketSender(ScapyPacket):
+class SocketSender(ScapySender):
 
     def __init__(self):
         super().__init__()
