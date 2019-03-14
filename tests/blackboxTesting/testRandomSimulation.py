@@ -2,22 +2,21 @@ import unittest
 import sys
 sys.path.append("../../src/")
 
-from simulations.randomSeriesSimulation import RandomSeriesSimulation
-from controller import Controller
-from supervisor import Supervisor
-from argParser import Parser
+from simulations.randomSimulation import RandomSimulation
+from supervisors.bitWiseSupervisor import BitWiseSupervisor
 
-
-class TestRandomSeriesSimulation(unittest.TestCase) :
+class TestRandomSimulation(unittest.TestCase) :
     
     def testCreateData(self):
         size = 20
-        supervisor = Supervisor(Controller(5, 42, str(size), 0, True, False, True))
-        simul = RandomSeriesSimulation(supervisor)
-    
+        supervisor = BitWiseSupervisor(0, 0)
+        simul = RandomSimulation(supervisor, supervisor.BER, 10, 42, size)
+        simul.data = simul.getRandomString(size)
         print("\nTESTING DATA GENERATION...")
-        
-        print("generated data : " + simul.data)
+
+
+        print("generated data : \n")
+        print(simul.data)
         self.assertEqual(len(simul.data), size)
         
     def testSplit(self):
@@ -28,11 +27,15 @@ class TestRandomSeriesSimulation(unittest.TestCase) :
         '''
         payloadLength = 5
         size = 100
-        supervisor = Supervisor(Controller(payloadLength, 42, str(size), 0, True, False, True))
-        simul = RandomSeriesSimulation(supervisor)
+        supervisor = BitWiseSupervisor(0, 0)
+        simul = RandomSimulation(supervisor, supervisor.BER, payloadLength, 42, size)
+        simul.data = simul.getRandomString(size)
+        simul.splittedData = simul.split(simul.data, payloadLength)
+
+
         
         print("data :\n" + simul.data + "\n")
-        
+
         elemLengths = 0
         print("splitted data :")
         for i in simul.splittedData :
@@ -49,9 +52,10 @@ class TestRandomSeriesSimulation(unittest.TestCase) :
         '''
         size = 100
         payloadLength = 6
-        supervisor = Supervisor(Controller(payloadLength, 42, str(size), 0.001, True, False, True))
-        simul = RandomSeriesSimulation(supervisor)
-        
+        supervisor = BitWiseSupervisor(0, 0)
+        simul = RandomSimulation(supervisor, supervisor.BER, payloadLength, 42, size)
+        simul.data = simul.getRandomString(size)
+        simul.splittedData = simul.split(simul.data, payloadLength)
         print("data :\n" + simul.data + "\n")
         
         elemLengths = 0
