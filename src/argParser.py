@@ -32,7 +32,7 @@ class Parser:
         parser.add_argument(
             'data',
             type=str,
-            help='Path to the file to be send. In simulated mode, this argument is the size of the virtual file to be sent. a letter \'G\', \'M\' or \'K\' can be appended to specify a unit')
+            help='data to send. In simulated/random scenario, this argument is the size of the virtual file to be sent. a letter \'G\', \'M\' or \'K\' can be appended to specify a unit')
 
         parser.add_argument(
             'ber',
@@ -46,30 +46,53 @@ class Parser:
             '-d',
             '--delayed',
             type=float,
-            help='float specifing a minimum time to wait betwen 2 trames. Default is ' +
-            str(defaultDelay),
-            default=defaultDelay)
+            help='float specifing a minimum time in second to wait betwen 2 trames. Default is ' +
+            str(defaultDelay) + 'WARNING: there is no way to simulate realistic interframe timing (nanosecond precision) because of thread sleeping precision in currents OS (milisecond precision)',
+            default=defaultDelay
+            )
+        
+        parser.add_argument(
+            '-s',
+            '--scenario',
+            type=str,
+            help='string specifing wich scenario will be done. Default is Sending a file' +
+            str(defaultPS),
+            default=defaultPS,
+            choices= ['file', 'string', 'random', 'randomF']
+            )
+
+        parser.add_argument(
+            '-m',
+            '--mode',
+            type=str,
+            help='string specifying the way packet are lunched. Default use scapy implementation' +
+            str(defaultPS),
+            default=defaultPS,
+            choices= ['scapy', 'socket', 'simulated']
+            )
+
+
+        parser.add_argument(
+            '-e',
+            '--supervisor',
+            type=str,
+            help='string switching the way erros are simulated. Default is bitWise' +
+            str(defaultPS),
+            default=defaultPS,
+            choices= ['bit', 'packet']
+            )
+
+
 
 
         parser.add_argument("-q", '--quiet', help="decrease output verbosity",
                             action="store_true")
 
-        parser.add_argument("-s", '--simulated', help="do not send any packet",
-                            action="store_true")
-
-        parser.add_argument("-rf", '--randomF', help="send random characters generated on the fly",
-                            action="store_true")
-
-        parser.add_argument("-r", '--random', help="send a randomly generated series of Bytes",
-                            action="store_true")
-        
-        parser.add_argument("-b", '--bitWise', help="use bitwise stuf",
-                            action="store_true")
 
         self.args = parser.parse_args()
         
         
-        if self.args.simulated or self.args.random or self.args.randomF:
+        if self.args.scenario or self.args.random or self.args.randomF:
             self.args.data = self.interpreteData(self.args.data)
         if (self.args.quiet == False):
             print("Simulation launched with :\n")
@@ -101,3 +124,38 @@ class Parser:
     
     
 
+''' CHECKING ARGS VALIDITY '''
+    
+    def checkargsvalidity(self):
+        if self.args.random:
+                if self.checkbervalidity(self.args.ber)\
+                        and self.checkpayloadsizevalidity(self.args.payloadSize)\
+                        and self.checkrandomdatavalidity(self.args.data):
+                    return True
+                else:
+                    return False
+        elif self.args.simulated:
+            if self.checkbervalidity(self.args.ber) \
+                    and self.checkpayloadsizevalidity(self.args.payloadSize):
+                return True
+            else:
+                return False
+
+    def checkrandomdatavalidity(self, data):
+        print(data)
+        if data < 0:
+            print("Error data not valid, it must be a positive integer")
+            return False
+        return True
+
+    def checkbervalidity(self, ber):
+        if ber < 0 or ber > 1:
+            print("Error ber not valid, it must be between 0 and 1")
+            return False
+        return True
+
+    def checkpayloadsizevalidity(self, payloadSize):
+        if payloadSize < 0 or payloadSize > 1472:
+            print("Error payloadSize not valid, it must be between 0 and 1472")
+            return False
+        return True
