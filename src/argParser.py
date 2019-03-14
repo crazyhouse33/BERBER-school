@@ -62,6 +62,9 @@ class Parser:
 
         parser.add_argument("-r", '--random', help="send a randomly generated series of Bytes",
                             action="store_true")
+        
+        parser.add_argument("-b", '--bitWise', help="use bitwise stuf",
+                            action="store_true")
 
         self.args = parser.parse_args()
 
@@ -93,7 +96,4 @@ class Parser:
             return prefix * 1000
         else:
             return -1
-    
-    
-    
-    ''' CHECKING OF ARGS VALIDITY '''
+

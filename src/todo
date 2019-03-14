@@ -1,2 +1,3 @@
 replace computeTotaleSize by virtual one (do not rely on len(), use arguments instead
-add progress bar when not quite mode 
+
+frame test, remettre le test qui chek toute la trame
