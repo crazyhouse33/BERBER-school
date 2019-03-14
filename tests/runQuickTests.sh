@@ -1,6 +1,6 @@
 #!/bin/bash
 dir="${0%/*}"
-cd "$dir"/blackboxTesting
+cd "$dir"/unitTest
 #python3 -m unittest quick
 python3 -m unittest testArgParser
 python3 -m unittest testController

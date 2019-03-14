@@ -12,7 +12,7 @@ class TestSimulation(unittest.TestCase):
     def testBERonByte(self):
         print("TESTING BERonByte...")
         size = 20
-        supervisor = Supervisor(Controller(5, 42, "20", 0, True, False, True))
+        supervisor = Supervisor(0,0)
         simul = RandomSeriesSimulation(supervisor)
         data = "o"
         data_bytes = bytes(data, 'utf-8')
