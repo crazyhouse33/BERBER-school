@@ -1,9 +1,8 @@
-cd blackboxTesting
+cd unitTest
 
+#python -m unittest testFrame
 
-python -m unittest testFrame
-
-python -m unittest testRandomSeriesSimulation
-python -m unittest testSimulation
-python -m unittest testArgParser
+python -m unittest testRandomSimulation
+#python -m unittest testSimulation
+#python -m unittest testArgParser
 cmd /k

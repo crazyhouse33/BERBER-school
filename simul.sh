@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 #./simul 10G 0.001 100 500 1400
 
 # store arguments in an array 
