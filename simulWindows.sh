@@ -13,12 +13,14 @@ echo "Starting simulation..."
 
 if [ $1 == "-p" ]; then
 	echo "Usage 1 : ber fixe, payload variable"
+	data=$2
+	ber=$3
 	payload_min=$4
 	payload_max=$5
 	step=$6
 	for ((payload=$payload_min;payload<=$payload_max;payload+=$step)); do
 		cd src/
-		results=$(python main.py -q -P $payload -r $data $ber)
+		results=$(python3 main.py -q -P $payload -s random $data $ber)
 		read results< <(echo "$results" | tail -n1)
 		echo $results
 		cd ../
@@ -26,7 +28,7 @@ if [ $1 == "-p" ]; then
 		results="$results \n"
 		echo $results$'\r' >> results.txt
 	done
-	#gnuplot -p -e "plot 'results.txt' u 3:4 w l"
+	gnuplot -p -e "plot 'results.txt' u 3:4 w l"
 fi
 
 if [ $1 == "-b" ]; then
@@ -50,7 +52,7 @@ if [ $1 == "-b" ]; then
 		ber=`echo $ber $step | awk '{print $1 + $2}'`
 		echo $ber
 		#cd src/
-		#results=$(python main.py -q -P $payload -r $data $ber)
+		#results=$(python3 main.py -q -P $payload -r $data $ber)
 		#read results< <(echo "$results" | tail -n1)
 		#echo $results
 		#cd ../
