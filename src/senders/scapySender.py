@@ -22,9 +22,7 @@ class ScapySender(Sender):
         sendp(Raw(self.trame.bytes), verbose=0, iface='lo')
         return self.totalSize
 
-    def sendErroned(self):
-        self.flipBit(int(self.totalSize / 2))
-        sendp(Raw(self.trame.bytes), verbose=0, iface='lo')
+
 
 # sendErronned is not supposed to alter target payload. to ecnonomise the
 # copy we just flip back altered bits at the end

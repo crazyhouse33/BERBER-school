@@ -22,9 +22,8 @@ class Supervisor:
             # if failure resend it
             randFloat = random.uniform(0, 1)
             if randFloat < self.chanceOfPacketFailure():
-                self.byteCount += self.sender.sendErroned()
-                self.afterSend()
-                self.packetFailure += 1
+                self.byteCount += self.sendErroned()
+
             else:
                 self.byteCount += self.sender.send()
                 self.afterSend()
@@ -37,6 +36,13 @@ class Supervisor:
         """Syntaxic sugar to mask the machine of state nature of the Sender class"""
         self.sender.setPayload(payload)
         self.send()
+
+    def sendErroned(self):
+        """send eroned frame in purpose"""
+        self.packet.flipBit(int(self.totalSize / 2))
+        self.packet.send()
+        self.afterSend()
+        self.packetFailure += 1
 
     def afterSend(self):
         time.sleep(self.interFrameDelay)
