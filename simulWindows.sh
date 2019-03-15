@@ -30,15 +30,15 @@ echo "Usage 1 : ber fixe, payload variable"
 	
 step=$6
 
-for (( payload=$payload_min;payload<=$payload_max;payload+=$step)); do
-cd src/
-results=$(python main.py -q -P $payload -r $data $ber)
-read results< <(echo "$results" | tail -n1)
-echo $results
-cd ../
-touch results.txt
-results="$results \n"
-echo $results$'\r' >> results.txt
+for (( payload=$payload_min;payload<=	$payload_max;payload+=$step)); do
+	cd src/
+	results=$(python main.py -q -P $payload -r $data 	$ber)
+	read results< <(echo "$results" | tail -n1)
+	echo $results
+	cd ../
+	touch results.txt
+	results="$results \n"
+	echo $results$'\r' >> results.txt
 done
 gnuplot -p -e "plot 'results.txt' u 3:4 w l"
 fi
@@ -51,22 +51,21 @@ ber_min=$4
 ber_max=$5
 
 ber=$ber_min
-step= 0.00005
+step=0.00005
 
 while [ $ber -lt $ber_max ]
 do
-	echo $ber + $step | bc
+	ber=`echo $ber + $step | bc`
+	cd src/
+	results=$(python main.py -q -P $payload -r $data $ber)
+	read results< <(echo "$results" | tail -n1)
+	echo $results
+	cd ../
+	touch results.txt
+	results="$results \n"
+	echo $results$'\r' >> results.txt
 done
-
-cd src/
-results=$(python main.py -q -P $payload -r $data $ber)
-read results< <(echo "$results" | tail -n1)
-echo $results
-cd ../
-touch results.txt
-results="$results \n"
-echo $results$'\r' >> results.txt
-#gnuplot -p -e "plot 'results.txt' u 3:4 w l"
+gnuplot -p -e "plot 'results.txt' u 3:4 w l"
 fi
 
 echo "done!"
