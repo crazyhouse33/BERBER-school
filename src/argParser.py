@@ -6,7 +6,7 @@ class Parser:
 
     def parse(self):
         defaultPS = 1472
-        defaultHS = 16
+        defaultHS = 42
         defaultFS = 10000
         defaultDelay = 0
         defaultBER = 0

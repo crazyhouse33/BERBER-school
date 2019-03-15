@@ -22,7 +22,7 @@ rm -f results.txt
 # for each data paylaod
 for (( i=200;i<=1476;i+=$step)); do
 	cd src/
-	results=$(python3 main.py -q -P $i -r $data $ber)
+	results=$(python3 main.py -q -P $i -s random $data $ber)
  	read results< <(echo "$results" | tail -n1)
 	echo $results
 	cd ../

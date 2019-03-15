@@ -53,7 +53,7 @@ class Controller:
             return FileSimulation(supervisor, data, payloadSize)
         elif (string=='random'):
             return RandomSimulation(supervisor, data, payloadSize)
-        elif (string =='randomf'):
+        elif (string =='randomF'):
             return RandomOnFlySimulation(supervisor, data, payloadSize)
         exit("Error, this scenario do no exist")
 
