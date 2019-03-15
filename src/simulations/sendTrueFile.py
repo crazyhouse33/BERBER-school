@@ -1,21 +1,15 @@
-from packets.scapySender import ScapySender
 from simulations.simulation import Simulation
 
 from  os import path
 from math import ceil
 
 
-class TrueFileSimulation(Simulation):
-
-    def __init__(self, supervisor, filePath, BER,  payloadSize):
-        self.filePath=filePath
-        self.packet = ScapySender()
-
-        Simulation.__init__(self, supervisor, BER, payloadSize)
+class FileSimulation(Simulation):
+    """data is a path to a file to be sent"""
 
     def preRun(self):
-        self.fileToSend = open(self.filePath, 'r')
-        fileSize=path.getsize(self.filePath)
+        self.fileToSend = open(self.dataToSend, 'r')
+        fileSize=path.getsize(self.dataToSend)
         self.supervisor.fileSize = fileSize
         self.predictedNumberOfPacket= ceil(fileSize/self.payloadSize)
         super().preRun()

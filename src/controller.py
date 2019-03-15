@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 from supervisors.supervisor import Supervisor
 from supervisors.bitWiseSupervisor import BitWiseSupervisor
-from simulations.noPacket import NoPacketSimulation
-from simulations.sendTrueFile import TrueFileSimulation
+from simulations.sendTrueFile import FileSimulation
 from simulations.randomSimulation import RandomSimulation
 from simulations.randomOnFlySimulation import RandomOnFlySimulation
+
+from senders.socketSender import SocketSender
+from senders.simulatedSender import SimulatedSender
+from senders.scapySender import ScapySender
 import simulations
 
 import threading
@@ -13,34 +16,58 @@ import os
 import logging
 
 class Controller:
-
-    def __init__(self, ber, delayed, payloadSize, headerSize, data, bitWise, randomf, random, simulated, quiet):
+    def __init__(self, BER, data, delayed, payloadSize, headerSize, quiet, scenario, supervisorString, mode):
         self.emergencyStop=False
         self.quiet=quiet
-        if bitWise:
-            self.supervisor = BitWiseSupervisor(ber, delayed)
-        else:
-            self.supervisor = Supervisor(ber, delayed)
 
-        if (simulated):
-            self.simulation = NoPacketSimulation(self.supervisor, ber, payloadSize, headerSize, data)
-        else:
-            if not self.IAmRoot():
-                exit("Scapy need root privileges to open raw socket. Exiting.")
-            if randomf:
-                self.simulation = RandomOnFlySimulation(self.supervisor, ber, payloadSize, headerSize, data)
-            elif random:
-                self.simulation = RandomSimulation(self.supervisor, ber, payloadSize, headerSize, data)
-            else:
-                self.simulation = TrueFileSimulation(self.supervisor, data, ber, payloadSize)
+        chosenSender = self.instantiateSender(mode, headerSize)
+
+        chosenSupervisor= self.instantiateSupervisor(supervisorString, chosenSender, BER, delayed)
+
+        self.chosenScenario = self.instantiateScenario(scenario, chosenSupervisor, data, payloadSize)
+
+    def instantiateSender(self, string, headerSize):
+        if (string=='simulated'):
+            return SimulatedSender(headerSize)
+
+        #need root limit
+        #-------------------------------------------
+        if not self.IAmRoot():
+            exit("Scapy need root privileges to open raw socket. Exiting.")
+
+        if (string=='socket'):
+            return SocketSender(headerSize)
+        if (string=='scapy'):
+            return ScapySender(headerSize)
+        exit("Error: this mode do not exist")
+
+    def instantiateSupervisor(self, string, sender, BER, delayed):
+        if (string == 'packet'):
+            return Supervisor(sender, BER, delayed) 
+        if (string == 'bit'):
+            return BitWiseSupervisor(sender, BER, delayed)
+        exit("Error: this supervisor do not exist")
+
+    def instantiateScenario(self, string, supervisor, data, payloadSize):
+        if (string=='file'):
+            return FileSimulation(supervisor, data, payloadSize)
+        elif (string=='random'):
+            return RandomSimulation(supervisor, data, payloadSize)
+        elif (string =='randomf'):
+            return RandomOnFlySimulation(supervisor, data, payloadSize)
+        exit("Error, this scenario do no exist")
+
+                
+
+
 
     def run(self):
         try:
             if (not self.quiet):
                 progressBarThread=threading.Thread(name='progressBarThread',target= self.threadFunction)
                 progressBarThread.start()
-            self.simulation.preRun()
-            self.simulation.run()
+            self.chosenScenario.preRun()
+            self.chosenScenario.run()
         # avoiding progress bar waiting impact on the timer by delagating the join to the simulation 
         except BaseException as e:
             self.emergencyStop=True
@@ -49,12 +76,12 @@ class Controller:
             exit(1)
 
         if (not self.quiet):
-            self.simulation.terminate(progressBarThread,quiet=False)
+            self.chosenScenario.terminate(progressBarThread,quiet=False)
         else:
-            self.simulation.terminate(quiet=True)
+            self.chosenScenario.terminate(quiet=True)
 
     def threadFunction(self):
-        while not self.emergencyStop and self.simulation.updateBar() :
+        while not self.emergencyStop and self.chosenScenario.updateBar() :
             time.sleep(0.1)
         print ('\n')
 

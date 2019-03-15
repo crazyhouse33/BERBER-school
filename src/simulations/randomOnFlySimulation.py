@@ -1,18 +1,14 @@
-from packets.scapySender import ScapySender
 from simulations.simulation import Simulation
 import string
 import random
 
 
 class RandomOnFlySimulation(Simulation):
-
-    def __init__(self, supervisor, BER, payloadSize, headerSize, fileSize):
-        self.packet = ScapySender()
-        supervisor.fileSize = fileSize
-
-        Simulation.__init__(self, supervisor, BER, payloadSize)
+    """data is an int specifing how many random byte need to be sent"""
 
     def preRun(self):
+        
+        self.supervisor.fileSize = self.dataToSend
         self.predictedNumberOfPacket, self.lastSize =divmod(
         self.supervisor.fileSize, self.payloadSize)
         self.cpt=self.predictedNumberOfPacket

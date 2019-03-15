@@ -1,10 +1,10 @@
 from scapy.all import Raw
-from packets.scapyPacket import ScapyPacket
+from senders.scapySender import ScapySender
 import socket
-class SocketSender(ScapyPacket):
+class SocketSender(ScapySender):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self,headerSize):
+        super().__init__(headerSize)
         self.sock= socket.socket( socket.AF_PACKET,socket.SOCK_RAW)
         self.sock.bind(('lo',0))
         
