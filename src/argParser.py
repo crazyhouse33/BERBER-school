@@ -95,8 +95,9 @@ class Parser:
 
 
         self.args = parser.parse_args()
-
-        self.interpreteData()
+        
+        if (self.args.scenario == "random" or self.args.scenario == "randomF"):
+            self.interpreteDataUnit()
 
         self.checkPayloadSize()
         self.checkData()
@@ -105,7 +106,7 @@ class Parser:
 
         if (self.args.quiet == False):
             print("Simulation launched with :\n")
-            for arg in sorted(self.args.__dict__):#need to sort it otherwise the order is not determinist
+            for arg in sorted(self.args.__dict__): #need to sort it, otherwise the order is not determinist
                 print ("\t", arg, ":", self.args.__dict__[arg])
             print()
         return self.args
@@ -117,19 +118,21 @@ class Parser:
             print ('WARNING: regled conflict: simulated only made sense used with the packet supervisor')
     
     '''
-    return the effective value of data, after interpreting it with format <int><G/M/K>
+    affect to self.data the effective value of data, after interpreting it with format <int><G/M/K>
     for gigabytes, megabytes, kilobytes or bytes
     '''
-    def interpreteData(self):
-        if self.args.scenario== 'simulated' or self.args.scenario =='random' or self.args.scenario=='randomF':#if simulation just need a number
-            unit = self.args.data[-1]
+    def interpreteDataUnit(self):
+        unit = self.args.data[-1]
+        
+        if (unit.isdigit()): #no letter in the end
+            self.args.data = int(self.args.data)
+        else:
             prefix = int(self.args.data[:-1])
-            if (unit.isdigit()): #if digit in the end
-                self.args.data= int(self.args.data)
-            elif (unit == 'G'):
+            
+            if (unit == 'G'):
                 self.args.data = prefix * 1000000000
             elif (unit == 'M'):
-                self.args.data= prefix * 1000000
+                self.args.data = prefix * 1000000
             elif (unit == 'K'):
                 self.args.data = prefix * 1000
             else:
@@ -140,11 +143,10 @@ class Parser:
         if type(self.args.data) is int:
             if self.args.data < 0:
                 exit("Error: data is not valid, it must be a positive integer")
-        #TODO else open file, and transmit it in data (simulation dont need to manage opening file anymore)
 
     def checkBer(self):
-        if self.args.ber < 0 or ber > 1:
-            exit("Error: BER is not valid. Must a float between 0 and 1")
+        if self.args.ber < 0 or self.args.ber > 1:
+            exit("Error: BER is not valid, it must be a float between 0 and 1")
 
     def checkPayloadSize(self):
         if self.args.payloadSize < 0 :
