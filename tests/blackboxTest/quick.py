@@ -1,44 +1,70 @@
+#!/usr/bin/python3
 import unittest
 import subprocess
 import re  # regexp
-from cStringIO import StringIO
+import io
 import sys
 sys.path.append("../../src/")
 from controller import Controller
-
+from argParser import Parser
 anyFloat = "\d+\.\d+"
 
+toTestNumericScenarios = ('random', 'randomF')
+toTestSupervisors = ('bit','packet')
+toTestModes = ('scapy', 'socket', 'simulated') 
 
 class TestBlackBox(unittest.TestCase):
+    """Dont use subprocess and main, otherwise the imports overhead is enormous, fake a parser instead"""
 
     def testQuick(self):
-        # udp over ip over ethernet case
-        self.blackBoxTest(
-            '2000 0 18 1472 42 True random bit scapy',
-            '10000 0.0 10294 ' +
-            anyFloat)
+# udp over ip over ethernet case
+        for scenario in toTestNumericScenarios:
+            for mode in toTestModes:
+                for supervisor in toTestSupervisors:
+                    self.blackBoxTest(
+                        '-q -m ' + mode + ' -e '+ supervisor+ ' -s '+ scenario+ ' 10000 0',
+                        '10000 0.0 10322 ' +
+                        anyFloat)
+                    """
+                    self.blackBoxTest(
 
+                        '-q -m ' + mode + ' -e '+ supervisor+ ' -s '+ scenario+ ' -H 1 -P 1 50 0',
+                        '50 0.0 100 ' +
+                        anyFloat)
+
+                    self.blackBoxTest(
+                        '-q -m ' + mode + ' -e '+ supervisor+ ' -s '+ scenario+ ' -H 0 -P 1 1000 0',
+                        '1000 0.0 1000 ' +
+                        anyFloat)
+                    """
     def blackBoxTest(self, command, expected):
+        print('testing: '+ command)
 
         regexp = re.compile(expected)
 
         command = command.split(' ')
-        data = command[0]
-        BER = command[1]
-        delayed = command[2]
-        payloadSize = command[3]
-        headerSize = command[4]
-        quiet = command[5]
-        scenario = command[6]
-        supervisorString = command[7]
-        mode = command[8]
-        controller = Controller(BER, data, delayed, payloadSize, headerSize, quiet, scenario, supervisorString, mode)
-        sys.stdout = mystdout = StringIO()
+
+        parser = Parser()        
+        args = parser.parse(command)
+
+        controller = Controller(args.ber, args.data, args.delayed, args.payloadSize, args.headerSize,  args.quiet, args.scenario, args.supervisor, args.mode)
+
+        sys.stdout = tmpStdOut = io.StringIO()
         controller.run()
         sys.stdout = sys.__stdout__
-        result = mystdout
+        result= tmpStdOut.getvalue()
         doResultMatchExpected = regexp.match(result)
+        if doResultMatchExpected == None:
+            self.fail('the scenario result do not match the expected one:\ngot        '+ result+ '\nexpected: '+ expected) 
         self.assertTrue(doResultMatchExpected)
+
+        self.bonusTests(args, controller)
+
+    def bonusTests(self, args, terminatedController):
+        """test aditional stuff thanks to supervisors stats. Not blackbox anymore"""
+        pass
+
+    
 
 if __name__ == '__main__':
     unittest.main()

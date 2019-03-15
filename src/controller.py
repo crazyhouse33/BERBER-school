@@ -71,7 +71,8 @@ class Controller:
         # avoiding progress bar waiting impact on the timer by delagating the join to the simulation 
         except BaseException as e:
             self.emergencyStop=True
-            progressBarThread.join()
+            if not self.quiet:
+                progressBarThread.join()
             logging.exception(e)
             exit(1)
 

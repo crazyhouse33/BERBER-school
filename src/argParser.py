@@ -3,20 +3,19 @@ from argparse import ArgumentParser
 
 class Parser:
     """parse the arguments, TODO make only fileSize positional"""
-
-    def parse(self):
+    def __init__(self):
         defaultPS = 1472
-        defaultHS = 42
+        defaultHS = 46
         defaultFS = 10000
         defaultDelay = 0
         defaultBER = 0
         defaultScenario= 'file'
         defaultSupervisor= 'bit'
         defaultMode='scapy'
-        parser = ArgumentParser(
+        self.parser = ArgumentParser(
             description='Simulation to observe the trade-off between small/large packet in non negligeable BER environment. Default settings for Headers/Payload Size correspond to UDP over IP over Ethernet scenario')
 
-        parser.add_argument(
+        self.parser.add_argument(
             '-P',
             '--payloadSize',
             type=int,
@@ -24,7 +23,7 @@ class Parser:
             str(defaultPS),
             default=defaultPS)
 
-        parser.add_argument(
+        self.parser.add_argument(
             '-H',
             '--headerSize',
             type=int,
@@ -34,7 +33,7 @@ class Parser:
 
 
 
-        parser.add_argument(
+        self.parser.add_argument(
             '-d',
             '--delayed',
             type=float,
@@ -43,7 +42,7 @@ class Parser:
             default=defaultDelay
             )
         
-        parser.add_argument(
+        self.parser.add_argument(
             '-s',
             '--scenario',
             type=str,
@@ -53,7 +52,7 @@ class Parser:
             choices= ['file', 'string', 'random', 'randomF']
             )
 
-        parser.add_argument(
+        self.parser.add_argument(
             '-m',
             '--mode',
             type=str,
@@ -64,7 +63,7 @@ class Parser:
             )
 
 
-        parser.add_argument(
+        self.parser.add_argument(
             '-e',
             '--supervisor',
             type=str,
@@ -77,15 +76,15 @@ class Parser:
 
 
 
-        parser.add_argument("-q", '--quiet', help="decrease output verbosity",
+        self.parser.add_argument("-q", '--quiet', help="decrease output verbosity",
                             action="store_true")
 
-        parser.add_argument(
+        self.parser.add_argument(
             'data',
             type=str,
             help='data to send. In simulated/random scenario, this argument is the size of the virtual file to be sent. a letter \'G\', \'M\' or \'K\' can be appended to specify a unit')
 
-        parser.add_argument(
+        self.parser.add_argument(
             'ber',
             type=float,
             help='float specifing the BER of the virtual network connexion. Default is ' +
@@ -94,7 +93,16 @@ class Parser:
             default=defaultBER)
 
 
-        self.args = parser.parse_args()
+
+
+    def parse(self, command=None):
+
+        if command == None:
+            self.args = self.parser.parse_args()
+        #this is convenient for tests
+        else:
+            self.args= self.parser.parse_args(command)
+
         
         if (self.args.scenario == "random" or self.args.scenario == "randomF"):
             self.interpreteDataUnit()
@@ -112,10 +120,10 @@ class Parser:
         return self.args
         
     def checkConflicts(self):
-        print (self.args.scenario, self.args.supervisor)
         if self.args.mode=='simulated' and self.args.supervisor=='bit':
             self.args.supervisor='packet'
-            print ('WARNING: regled conflict: simulated only made sense used with the packet supervisor')
+            if self.args.quiet==False:
+                print ('WARNING: autoregled conflict: simulated only made sense used with the packet supervisor')
     
     '''
     affect to self.data the effective value of data, after interpreting it with format <int><G/M/K>
@@ -151,3 +159,4 @@ class Parser:
     def checkPayloadSize(self):
         if self.args.payloadSize < 0 :
             exit("Error: payloadSize is not valid, it must be a positive integer")
+

@@ -1,3 +1,7 @@
 replace computeTotaleSize by virtual one (do not rely on len(), use arguments instead
 
 frame test, remettre le test qui chek toute la trame
+
+add trello task 'separated parser intialisation in init'
+
+close socket before leaving!
