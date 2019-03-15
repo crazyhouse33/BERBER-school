@@ -11,11 +11,10 @@ class ProgressBar():
 
     def update(self, iteration ):
         """return True if the end was reached"""
+        if iteration == self.end: 
+            return False
         percent = ("{0:." + str(self.decimals) + "f}").format(100 * (iteration / float(self.end)))
         filledLength = int(self.length * iteration // self.end)
         bar = self.fill * filledLength + '-' * (self.length - filledLength)
         print('\r%s |%s| %s%% %s' % (self.prefix, bar, percent, self.suffix), end = '')
-
-        if iteration == self.end: 
-            return False
         return True
