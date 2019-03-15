@@ -30,7 +30,7 @@ class Controller:
         if (string=='simulated'):
             return SimulatedSender(headerSize)
 
-        #need root limit
+        #need-to-be-root limit
         #-------------------------------------------
         if not self.IAmRoot():
             exit("Scapy need root privileges to open raw socket. Exiting.")
