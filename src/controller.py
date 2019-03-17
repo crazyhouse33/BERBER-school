@@ -16,19 +16,19 @@ import os
 import logging
 
 class Controller:
-    def __init__(self, BER, data, delayed, payloadSize, headerSize, quiet, scenario, supervisorString, mode):
+    def __init__(self, BER, data, delayed, payloadSize, headerSize, quiet, scenario, supervisorString, mode, iface):
         self.emergencyStop=False
         self.quiet=quiet
 
-        self.chosenSender = self.instantiateSender(mode, headerSize)
+        self.chosenSender = self.instantiateSender(mode, headerSize, iface)
 
         chosenSupervisor= self.instantiateSupervisor(supervisorString, self.chosenSender, BER, delayed)
 
         self.chosenScenario = self.instantiateScenario(scenario, chosenSupervisor, data, payloadSize)
 
-    def instantiateSender(self, string, headerSize):
+    def instantiateSender(self, string, headerSize, iface):
         if (string=='simulated'):
-            return SimulatedSender(headerSize)
+            return SimulatedSender(headerSize, iface)
 
         #need-to-be-root limit
         #-------------------------------------------
@@ -36,9 +36,9 @@ class Controller:
             exit("Scapy need root privileges to open raw socket. Exiting.")
 
         if (string=='socket'):
-            return SocketSender(headerSize)
+            return SocketSender(headerSize, iface)
         if (string=='scapy'):
-            return ScapySender(headerSize)
+            return ScapySender(headerSize,iface)
         exit("Error: this mode do not exist")
 
     def instantiateSupervisor(self, string, sender, BER, delayed):

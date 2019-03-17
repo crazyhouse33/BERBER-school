@@ -9,5 +9,5 @@ parser = Parser()
 args = parser.parse()
 
 
-controller = Controller(args.ber, args.data, args.delayed, args.payloadSize, args.headerSize,  args.quiet, args.scenario, args.supervisor, args.mode)
+controller = Controller(args.ber, args.data, args.delayed, args.payloadSize, args.headerSize,  args.quiet, args.scenario, args.supervisor, args.mode, args.iface)
 controller.run()

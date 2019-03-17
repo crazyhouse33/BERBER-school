@@ -5,3 +5,5 @@ frame test, remettre le test qui chek toute la trame
 add trello task 'separated parser intialisation in init'
 
 close socket before leaving!
+
+check if setting ip dest 127.0.. make the packet to not be really send on wpls (2 pc + monitor mode)

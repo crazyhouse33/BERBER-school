@@ -5,8 +5,8 @@ import crcmod
 
 class ScapySender(Sender):
 
-    def __init__(self, headerSize):
-        super().__init__(headerSize)
+    def __init__(self, headerSize, iface):
+        super().__init__(headerSize, iface )
 
         self.IP_DST_ADDRESS = "127.0.0.1"
         self.UDP_PORT = 26381
@@ -19,7 +19,7 @@ class ScapySender(Sender):
 
     def send(self):
         """send loaded packet"""
-        sendp(Raw(self.trame.bytes), verbose=0, iface='lo')
+        sendp(Raw(self.trame.bytes), verbose=0, iface= self.iface)
         return self.totalSize
 
 

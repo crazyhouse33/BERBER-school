@@ -47,7 +47,7 @@ class TestBlackBox(unittest.TestCase):
         parser = Parser()        
         args = parser.parse(command)
 
-        controller = Controller(args.ber, args.data, args.delayed, args.payloadSize, args.headerSize,  args.quiet, args.scenario, args.supervisor, args.mode)
+        controller = Controller(args.ber, args.data, args.delayed, args.payloadSize, args.headerSize,  args.quiet, args.scenario, args.supervisor, args.mode, args.iface)
 
         sys.stdout = tmpStdOut = io.StringIO()
         controller.run()

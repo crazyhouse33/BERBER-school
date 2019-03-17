@@ -3,8 +3,8 @@ from senders.scapySender import ScapySender
 import socket
 class SocketSender(ScapySender):
 
-    def __init__(self,headerSize):
-        super().__init__(headerSize)
+    def __init__(self,headerSize, iface):
+        super().__init__(headerSize,iface)
         self.sock= socket.socket( socket.AF_PACKET,socket.SOCK_RAW)
         self.sock.bind(('lo',0))
         

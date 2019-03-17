@@ -1,10 +1,12 @@
 from argparse import ArgumentParser
 
+import psutil#check existence of iface and mtu
+
 
 class Parser:
     """parse the arguments, TODO make only fileSize positional"""
     def __init__(self):
-        defaultPS = 1472
+        defaultPS = 1454
         defaultHS = 46
         defaultFS = 10000
         defaultDelay = 0
@@ -12,6 +14,7 @@ class Parser:
         defaultScenario= 'file'
         defaultSupervisor= 'bit'
         defaultMode='scapy'
+        defaultIface='lo'
         self.parser = ArgumentParser(
             description='Simulation to observe the trade-off between small/large packet in non negligeable BER environment. Default settings for Headers/Payload Size correspond to UDP over IP over Ethernet scenario')
 
@@ -40,6 +43,15 @@ class Parser:
             help='float specifing a minimum time in second to wait betwen 2 trames. Default is ' +
             str(defaultDelay) + 'WARNING: there is no way to simulate realistic interframe timing (nanosecond precision) because of thread sleeping precision in currents OS (milisecond precision)',
             default=defaultDelay
+            )
+
+        self.parser.add_argument(
+            '-i',
+            '--iface',
+            type=str,
+            help='str specifing the interface to be used for sending packet. Default is ' +
+            str(defaultIface),
+            default=defaultIface
             )
         
         self.parser.add_argument(
@@ -111,6 +123,7 @@ class Parser:
         self.checkData()
         self.checkPayloadSize()
         self.checkConflicts()
+        self.checkIface()
 
         if (self.args.quiet == False):
             print("Simulation launched with :\n")
@@ -150,13 +163,21 @@ class Parser:
     def checkData(self):
         if type(self.args.data) is int:
             if self.args.data < 0:
-                exit("Error: data is not valid, it must be a positive integer")
+                exit("Error: data is not valid, it must be a positive integer. Exiting")
 
     def checkBer(self):
         if self.args.ber < 0 or self.args.ber > 1:
-            exit("Error: BER is not valid, it must be a float between 0 and 1")
+            exit("Error: BER is not valid, it must be a float between 0 and 1. Exiting")
 
     def checkPayloadSize(self):
         if self.args.payloadSize < 0 :
-            exit("Error: payloadSize is not valid, it must be a positive integer")
+            exit("Error: payloadSize is not valid, it must be a positive integer. Exiting")
+
+    def checkIface(self):
+        try:
+            iface = psutil.net_if_stats()[self.args.iface]
+        except:
+            exit("Error: the interface specified do not exist. Exiting")
+
+
 
