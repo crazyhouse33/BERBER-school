@@ -114,7 +114,7 @@ class Parser:
 
         if (self.args.quiet == False):
             print("Simulation launched with :\n")
-            for arg in sorted(self.args.__dict__): #need to sort it, otherwise the order is not determinist
+            for arg in sorted(self.args.__dict__): #need to sort it, otherwise the order is not deterministic
                 print ("\t", arg, ":", self.args.__dict__[arg])
             print()
         return self.args
@@ -123,7 +123,7 @@ class Parser:
         if self.args.mode=='simulated' and self.args.supervisor=='bit':
             self.args.supervisor='packet'
             if self.args.quiet==False:
-                print ('WARNING: autoregled conflict: simulated only made sense used with the packet supervisor')
+                print ('WARNING: autohandled conflict: simulated only made sense used with the packet supervisor')
     
     '''
     affect to self.data the effective value of data, after interpreting it with format <int><G/M/K>

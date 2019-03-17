@@ -9,8 +9,8 @@ class SocketSender(ScapySender):
         self.sock.bind(('lo',0))
         
     def send(self):
-        """send loaded packet"""
         self.sock.send(self.trame.bytes)
         return self.totalSize
 
-    
+    def die(self):
+        self.sock.close()

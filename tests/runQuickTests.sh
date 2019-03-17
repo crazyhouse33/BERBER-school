@@ -3,6 +3,7 @@ dir="${0%/*}"
 cd "$dir"/blackboxTest
 python3 -m unittest quick
 
+cd ../unitTest
 #python3 -m unittest testArgParser
 #python3 -m unittest testController
 #python3 -m unittest testFrame

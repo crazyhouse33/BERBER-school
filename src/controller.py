@@ -20,9 +20,9 @@ class Controller:
         self.emergencyStop=False
         self.quiet=quiet
 
-        chosenSender = self.instantiateSender(mode, headerSize)
+        self.chosenSender = self.instantiateSender(mode, headerSize)
 
-        chosenSupervisor= self.instantiateSupervisor(supervisorString, chosenSender, BER, delayed)
+        chosenSupervisor= self.instantiateSupervisor(supervisorString, self.chosenSender, BER, delayed)
 
         self.chosenScenario = self.instantiateScenario(scenario, chosenSupervisor, data, payloadSize)
 
@@ -30,7 +30,7 @@ class Controller:
         if (string=='simulated'):
             return SimulatedSender(headerSize)
 
-        #need root limit
+        #need-to-be-root limit
         #-------------------------------------------
         if not self.IAmRoot():
             exit("Scapy need root privileges to open raw socket. Exiting.")
@@ -75,6 +75,8 @@ class Controller:
                 progressBarThread.join()
             logging.exception(e)
             exit(1)
+        finally:
+            self.chosenSender.die()
 
         if (not self.quiet):
             self.chosenScenario.terminate(progressBarThread,quiet=False)

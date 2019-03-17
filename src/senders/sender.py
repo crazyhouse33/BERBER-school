@@ -18,3 +18,6 @@ class Sender(abc.ABC):
 
     def computeTotalSize(self):
         self.totalSize = self.payloadSize + self.headerSize
+
+    def die(self):
+        pass
