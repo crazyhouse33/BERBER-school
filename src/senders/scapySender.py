@@ -17,6 +17,16 @@ class ScapySender(Sender):
             initCrc=0,
             xorOut=0xFFFFFFFF)  # preparing checksum computation
 
+        neededArtificialHeader= headerSize - len(self.baseTrame.bytes)-4
+        if neededArtificialHeader >0:
+            headerToAppend= neededArtificialHeader * 'X'
+            self.baseTrame.append(BitArray(bytes(Raw(headerToAppend))))
+        elif neededArtificialHeader <0:
+            exit("The minimal number of bytes your system send to use UDP over IP over Ether is greater than the headerSize you specified:\nspecified: "+ str(headerSize)+ '\nmin: ' + str(headerSize-neededArtificialHeader))
+
+            
+
+
     def send(self):
         """send loaded packet"""
         sendp(Raw(self.trame.bytes), verbose=0, iface= self.iface)

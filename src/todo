@@ -7,3 +7,5 @@ add trello task 'separated parser intialisation in init'
 close socket before leaving!
 
 check if setting ip dest 127.0.. make the packet to not be really send on wpls (2 pc + monitor mode)
+
+fix progress bar that do not go to 100% anymore if the thread is too quick
