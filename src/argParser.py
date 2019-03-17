@@ -174,10 +174,17 @@ class Parser:
             exit("Error: payloadSize is not valid, it must be a positive integer. Exiting")
 
     def checkIface(self):
-        try:
-            iface = psutil.net_if_stats()[self.args.iface]
-        except:
-            exit("Error: the interface specified do not exist. Exiting")
+        if not (self.args.mode=='simulated'):
+            headerSize=self.args.headerSize
+            payloadSize=self.args.payloadSize
+            try:
+                iface = psutil.net_if_stats()[self.args.iface]
+            except:
+                exit("Error: the interface specified do not exist. Exiting")
+            if not iface.isup:
+                exit("Error: the interface specified is down. Exiting")
+            if headerSize + payloadSize > iface.mtu:
+                exit ("Error: the chosen option would generate trames of size "+ str(headerSize+payloadSize)+' Bytes. But the selectioned interface have an MTU of only '+ str(iface.mtu))
 
 
 
