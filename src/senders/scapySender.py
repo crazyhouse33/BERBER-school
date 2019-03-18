@@ -54,7 +54,7 @@ class ScapySender(Sender):
         return self.initialCheckSum
 
     def getFCS(self):
-        #compute checksum, ignoring cut last bytes
+        #compute total frame checksum
         currentCheksum = self.crc32_func(self.trame.bytes)
         return currentCheksum
 
