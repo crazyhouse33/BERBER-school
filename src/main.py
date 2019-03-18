@@ -3,6 +3,7 @@ import sys
 from argParser import Parser
 from controller import Controller
 
+#TODO what is that?
 sys.path.append("./src/")
 
 parser = Parser()
