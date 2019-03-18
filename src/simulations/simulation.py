@@ -44,6 +44,7 @@ class Simulation(abc.ABC):
             print (
                 self.supervisor.fileSize,
                 self.supervisor.BER,
+                self.payloadSize,
                 self.supervisor.getCount(),
                 timeTaken,
             )

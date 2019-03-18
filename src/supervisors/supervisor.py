@@ -15,7 +15,7 @@ class Supervisor:
 
 
     def send(self):
-        """When using scappy, just send the packet since error will be simulated in the subclasses"""
+        """When using scapy, just send the packet since error will be simulated in the subclasses"""
         # send it once
         self.numberOfPacket += 1
         while True:
@@ -38,9 +38,9 @@ class Supervisor:
         self.send()
 
     def sendErroned(self):
-        """send eroned frame in purpose"""
-        self.packet.flipBit(int(self.totalSize / 2))
-        self.packet.send()
+        """send erroned frame in purpose"""
+        self.sender.flipBit(int(self.totalSize / 2))
+        self.sender.send()
         self.afterSend()
         self.packetFailure += 1
 

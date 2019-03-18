@@ -20,7 +20,7 @@ if [ $1 == "-p" ]; then
 	step=$6
 	for ((payload=$payload_min;payload<=$payload_max;payload+=$step)); do
 		cd src/
-		results=$(python3 main.py -q -P $payload -s random $data $ber)
+		results=$(python3 main.py -q -P $payload -s randomF -m socket $data $ber)
 		read results< <(echo "$results" | tail -n1)
 		echo $results
 		cd ../

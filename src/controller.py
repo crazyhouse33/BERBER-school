@@ -33,7 +33,7 @@ class Controller:
         #need-to-be-root limit
         #-------------------------------------------
         if not self.IAmRoot():
-            exit("Scapy need root privileges to open raw socket. Exiting.")
+            exit("Scapy needs root privileges to open raw socket. Exiting.")
 
         if (string=='socket'):
             return SocketSender(headerSize, iface)
