@@ -73,7 +73,8 @@ class Controller:
             self.emergencyStop=True
             if not self.quiet:
                 progressBarThread.join()
-            logging.exception(e)
+            if (not isinstance(e,KeyboardInterrupt)):
+                logging.exception(e)
             exit(1)
         finally:
             self.chosenSender.die()
