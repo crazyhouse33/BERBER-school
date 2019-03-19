@@ -8,35 +8,30 @@ from supervisors.bitWiseSupervisor import BitWiseSupervisor
 class TestRandomSimulation(unittest.TestCase) :
     
     def testCreateData(self):
-        size = 20
-        BER = 0
-        interFrameDelay = 0
-        supervisor = BitWiseSupervisor(BER, interFrameDelay)
-        simul = RandomSimulation(supervisor, supervisor.BER, 10, 42, size)
-        simul.data = simul.getRandomString(size)
-        print("\nTESTING DATA GENERATION...")
-
-
-        print("generated data : \n")
-        print(simul.data)
-        self.assertEqual(len(simul.data), size)
+        print("\nTESTING data generation...")
+        size = 120
+        simul = RandomSimulation(0, 0, 0)
+        data = simul.getRandomString(size)
+        
+        print("\ngenerated data :")
+        print(data)
+        self.assertEqual(len(data), size)
+        
         
     def testSplit(self):
-        print("\nTESTING DATA SPLITTING...")
+        print("\nTESTING data splitting...\n")
         
         '''
-        case size % payloadLength = 0
+        case size % splitSize = 0
         '''
-        payloadLength = 5
+        
         size = 100
-        supervisor = BitWiseSupervisor(0, 0)
-        simul = RandomSimulation(supervisor, supervisor.BER, payloadLength, 42, size)
-        simul.data = simul.getRandomString(size)
-        simul.splittedData = simul.split(simul.data, payloadLength)
-
-
+        splitSize = 5
+        simul = RandomSimulation(0, 0, 0)
+        data = simul.getRandomString(size)
+        simul.splittedData = simul.split(data, splitSize)
         
-        print("data :\n" + simul.data + "\n")
+        print("data :\n" + data + "\n")
 
         elemLengths = 0
         print("splitted data :")
@@ -45,20 +40,21 @@ class TestRandomSimulation(unittest.TestCase) :
             elemLengths = elemLengths + len(i)
         print("\n")
         
-        self.assertEqual(len(simul.splittedData), float(size)/float(payloadLength))
-        self.assertEqual(elemLengths, len(simul.data))
-        self.splitIntegrityTest(simul.data, simul.splittedData)
+        self.assertEqual(len(simul.splittedData), float(size)/float(splitSize))
+        self.assertEqual(elemLengths, len(data))
+        self.splitIntegrityTest(data, simul.splittedData)
+        
+        print("-----\n")
         
         '''
-        case size % payloadLength != 0
+        case size % splitSize != 0
         '''
         size = 100
-        payloadLength = 6
-        supervisor = BitWiseSupervisor(0, 0)
-        simul = RandomSimulation(supervisor, supervisor.BER, payloadLength, 42, size)
-        simul.data = simul.getRandomString(size)
-        simul.splittedData = simul.split(simul.data, payloadLength)
-        print("data :\n" + simul.data + "\n")
+        splitSize = 6
+        simul = RandomSimulation(0, 0, 0)
+        data = simul.getRandomString(size)
+        simul.splittedData = simul.split(data, splitSize)
+        print("data :\n" + data + "\n")
         
         elemLengths = 0
         print("splitted data :")
@@ -66,8 +62,10 @@ class TestRandomSimulation(unittest.TestCase) :
             print("[" + i + "]")
             elemLengths = elemLengths + len(i)
         
-        self.assertEqual(elemLengths, len(simul.data))
-        self.splitIntegrityTest(simul.data, simul.splittedData)
+        print("\n")
+        
+        self.assertEqual(elemLengths, len(data))
+        self.splitIntegrityTest(data, simul.splittedData)
         
     
     '''
@@ -77,7 +75,6 @@ class TestRandomSimulation(unittest.TestCase) :
         concat = ""
         for elem in tab:
             concat += elem
-        print("data : " + data)
         print("concatenated split : " + concat + "\n")
         self.assertEqual(concat, data)
         

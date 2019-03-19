@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 
-import psutil#check existence of iface and mtu
+import psutil #check existence of iface and mtu
 
 
 class Parser:

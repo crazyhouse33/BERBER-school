@@ -66,7 +66,8 @@ class ScapySender(Sender):
 
     def computeTotalSize(self):
         self.totalSize = len(self.trame.bytes)
-
+    
+    #
     def flipBit(self, position):
         self.flippedBit.append(position)
         self.trame.invert(position)
