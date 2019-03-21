@@ -33,7 +33,7 @@ class Controller:
         #need-to-be-root limit
         #-------------------------------------------
         if not self.IAmRoot():
-            exit("Scapy need root privileges to open raw socket. Exiting.")
+            exit("Scapy needs root privileges to open raw socket. Exiting.")
 
         if (string=='socket'):
             return SocketSender(headerSize, iface)
@@ -73,7 +73,8 @@ class Controller:
             self.emergencyStop=True
             if not self.quiet:
                 progressBarThread.join()
-            logging.exception(e)
+            if (not isinstance(e,KeyboardInterrupt)):
+                logging.exception(e)
             exit(1)
         finally:
             self.chosenSender.die()

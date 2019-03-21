@@ -5,7 +5,7 @@ from simulations.randomOnFlySimulation import RandomOnFlySimulation
 
 
 class RandomSimulation(RandomOnFlySimulation):
-
+    
     def __init__(self, supervisor, fileSize, payloadSize):
         super().__init__( supervisor, fileSize, payloadSize)
 
@@ -21,9 +21,11 @@ class RandomSimulation(RandomOnFlySimulation):
             self.supervisor.setAndSend(payload)
 
 
-    '''turn a series of data into an array of strings of size splitSize
+    '''
+    turn a series of data into an array of strings of size splitSize
     return the array of strings
-    the last element may be less than splitSize long'''
+    the last element may be less than splitSize long
+    '''
     def split(self, data, splitSize):
         res = []
         index = 0
