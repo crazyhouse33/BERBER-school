@@ -29,3 +29,8 @@ class RandomOnFlySimulation(Simulation):
         for x in range(sizeOfString):
             data += random.choice(string.hexdigits)
         return data
+    """
+    TODO Benchmark against
+    randomBytes= os.urandom(sizeOfString)
+    return b64encode(randomBytes).decode('utf-8')
+    """
