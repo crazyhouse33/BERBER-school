@@ -37,13 +37,32 @@ class TestBlackBox(unittest.TestCase):
                         '1000 0.0 1000 ' +
                         anyFloat)
                     """
+    def testDelayed(self):
+        delayed=0.2
+        result= self.getResult('-q -m ' + 'simulated -e bit -P 1 -s randomF '+ '-d '+ str(delayed)+ ' 2 0'
+                        )
+        result= result.split(' ')
+        time = result[3]
+        timeFloat=float(time)
+        self.assertGreater(timeFloat,delayed)
+
     def blackBoxTest(self, command, expected):
         print('testing: '+ command)
 
         regexp = re.compile(expected)
+        
+        result= self.getResult(command)
 
+        doResultMatchExpected = regexp.match(result)
+        if doResultMatchExpected == None:
+            self.fail('the scenario result do not match the expected one:\ngot        '+ result+ '\nexpected: '+ expected) 
+        self.assertTrue(doResultMatchExpected)
+
+        self.bonusTests(args, controller)
+        return result
+
+    def getResult(self,command):
         command = command.split(' ')
-
         parser = Parser()        
         args = parser.parse(command)
 
@@ -52,13 +71,8 @@ class TestBlackBox(unittest.TestCase):
         sys.stdout = tmpStdOut = io.StringIO()
         controller.run()
         sys.stdout = sys.__stdout__
-        result= tmpStdOut.getvalue()
-        doResultMatchExpected = regexp.match(result)
-        if doResultMatchExpected == None:
-            self.fail('the scenario result do not match the expected one:\ngot        '+ result+ '\nexpected: '+ expected) 
-        self.assertTrue(doResultMatchExpected)
+        return tmpStdOut.getvalue()
 
-        self.bonusTests(args, controller)
 
     def bonusTests(self, args, terminatedController):
         """test aditional stuff thanks to supervisors stats. Not blackbox anymore"""
