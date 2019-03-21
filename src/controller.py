@@ -15,80 +15,93 @@ import time
 import os
 import logging
 
+
 class Controller:
-    def __init__(self, BER, data, delayed, payloadSize, headerSize, quiet, scenario, supervisorString, mode, iface):
-        self.emergencyStop=False
-        self.quiet=quiet
+
+    def __init__(self, BER, data, delayed, payloadSize,
+                 headerSize, quiet, scenario, supervisorString, mode, iface):
+        self.emergencyStop = False
+        self.quiet = quiet
 
         self.chosenSender = self.instantiateSender(mode, headerSize, iface)
 
-        chosenSupervisor= self.instantiateSupervisor(supervisorString, self.chosenSender, BER, delayed)
+        chosenSupervisor = self.instantiateSupervisor(
+            supervisorString,
+            self.chosenSender,
+            BER,
+            delayed)
 
-        self.chosenScenario = self.instantiateScenario(scenario, chosenSupervisor, data, payloadSize)
+        self.chosenScenario = self.instantiateScenario(
+            scenario,
+            chosenSupervisor,
+            data,
+            payloadSize)
 
     def instantiateSender(self, string, headerSize, iface):
-        if (string=='simulated'):
+        if (string == 'simulated'):
             return SimulatedSender(headerSize, iface)
 
-        #need-to-be-root limit
+        # need-to-be-root limit
         #-------------------------------------------
         if not self.IAmRoot():
             exit("Scapy needs root privileges to open raw socket. Exiting.")
 
-        if (string=='socket'):
+        if (string == 'socket'):
             return SocketSender(headerSize, iface)
-        if (string=='scapy'):
-            return ScapySender(headerSize,iface)
+        if (string == 'scapy'):
+            return ScapySender(headerSize, iface)
         exit("Error: this mode do not exist")
 
     def instantiateSupervisor(self, string, sender, BER, delayed):
         if (string == 'packet'):
-            return Supervisor(sender, BER, delayed) 
+            return Supervisor(sender, BER, delayed)
         if (string == 'bit'):
             return BitWiseSupervisor(sender, BER, delayed)
         exit("Error: this supervisor do not exist")
 
     def instantiateScenario(self, string, supervisor, data, payloadSize):
-        if (string=='file'):
+        if (string == 'file'):
             return FileSimulation(supervisor, data, payloadSize)
-        elif (string=='random'):
+        elif (string == 'random'):
             return RandomSimulation(supervisor, data, payloadSize)
-        elif (string =='randomF'):
+        elif (string == 'randomF'):
             return RandomOnFlySimulation(supervisor, data, payloadSize)
         exit("Error, this scenario do no exist")
-
-                
-
-
 
     def run(self):
         try:
             if (not self.quiet):
-                progressBarThread=threading.Thread(name='progressBarThread',target= self.threadFunction)
+                progressBarThread = threading.Thread(
+                    name='progressBarThread',
+                    target=self.threadFunction)
                 progressBarThread.start()
             self.chosenScenario.preRun()
             self.chosenScenario.run()
-        # avoiding progress bar waiting impact on the timer by delagating the join to the simulation 
+        # avoiding progress bar waiting impact on the timer by delagating the
+        # join to the simulation
         except BaseException as e:
-            self.emergencyStop=True
+            self.emergencyStop = True
             if not self.quiet:
                 progressBarThread.join()
-            if (not isinstance(e,KeyboardInterrupt)):
+            if (not isinstance(e, KeyboardInterrupt)):
                 logging.exception(e)
             exit(1)
         finally:
             self.chosenSender.die()
 
         if (not self.quiet):
-            self.chosenScenario.terminate(progressBarThread,quiet=False)
+            self.chosenScenario.terminate(progressBarThread, quiet=False)
         else:
             self.chosenScenario.terminate(quiet=True)
 
     def threadFunction(self):
-        while not self.emergencyStop and self.chosenScenario.updateBar() :
+        while not self.emergencyStop and self.chosenScenario.updateBar():
             time.sleep(0.1)
-        print ('\n')
-
+        print('\n')
 
     def IAmRoot(self):
-        return os.geteuid() == 0
+        try:
+            isAdmin = os.getuid() == 0
+        except AttributeError:
+            isAdmin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        return isAdmin
