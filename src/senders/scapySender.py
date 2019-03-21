@@ -40,7 +40,7 @@ class ScapySender(Sender):
         return self.totalSize
 
 
-# sendErronned is not supposed to alter target payload. to ecnonomise the
+# sendErroned is not supposed to alter target payload. to ecnonomise the
 # copy we just flip back altered bits at the end
         self.flipBit(int(self.totalSize / 2))
         return self.totalSize
@@ -59,30 +59,38 @@ class ScapySender(Sender):
         self.computeTotalSize()
         return self.initialCheckSum
 
+    '''
+    compute total frame ethernet checksum
+    '''
     def getFCS(self):
-        # compute total frame checksum
-        currentCheksum = self.crc32_func(self.trame.bytes)
-        return currentCheksum
+        currentChecksum = self.crc32_func(self.trame.bytes)
+        return currentChecksum
 
     def computeTotalSize(self):
         self.totalSize = len(self.trame.bytes)
     
-    #
+    '''
+    invert the bit at position i in the frame
+    '''
     def flipBit(self, position):
         self.flippedBit.append(position)
         self.trame.invert(position)
 
 
 # needed for bitwise stuff section
-
+    '''
+    reset the frame to match the initial one
+    '''
     def unflip(self):
-        """reset the frame to match the initial one"""
         for i in self.flippedBit:
             self.trame.invert(i)
         self.flippedBit = []
-
+    
+    '''
+    return true if the current frame checksum match the initial one
+    '''
     def checkIfErronned(self):
-        """return true if the current frame checksum match the initial one"""
+        
         currentCheksum = self.crc32_func(
             self.trame.bytes[
                 :-

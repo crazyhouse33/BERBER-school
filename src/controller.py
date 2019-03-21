@@ -14,6 +14,7 @@ import threading
 import time
 import os
 import logging
+import ctypes
 
 
 class Controller:
@@ -105,3 +106,4 @@ class Controller:
         except AttributeError:
             isAdmin = ctypes.windll.shell32.IsUserAnAdmin() != 0
         return isAdmin
+

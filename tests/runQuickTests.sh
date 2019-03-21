@@ -6,3 +6,4 @@ cd "$dir"/blackboxTest
 cd ../unitTest
 python3 testArgParser.py
 python3 testRandomSimulation.py
+python3 testBitWiseSupervisor.py

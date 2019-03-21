@@ -3,8 +3,10 @@ from supervisors.supervisor import Supervisor
 
 
 class BitWiseSupervisor(Supervisor):
-    """Create and use a PacketSender to luanch packet and actually computes statistics"""
-
+    
+    '''
+    Create and use a PacketSender to launch packet and actually computes statistics
+    '''
     def send(self):
         self.numberOfPacket += 1
         while True:
@@ -15,7 +17,9 @@ class BitWiseSupervisor(Supervisor):
                     break
                 self.packetFailure += 1
                 self.sender.unflip()
-
+    '''
+    Invert all bits of the frame to send, with a probability corresponding to BER
+    '''
     def applyBER(self):
         for i in range(self.sender.getSize()):
             randFloat = random.uniform(0, 1)
