@@ -62,16 +62,18 @@ class ScapySender(Sender):
     '''
     compute total frame ethernet checksum
     '''
+
     def getFCS(self):
         currentChecksum = self.crc32_func(self.trame.bytes)
         return currentChecksum
 
     def computeTotalSize(self):
         self.totalSize = len(self.trame.bytes)
-    
+
     '''
     invert the bit at position i in the frame
     '''
+
     def flipBit(self, position):
         self.flippedBit.append(position)
         self.trame.invert(position)
@@ -81,16 +83,18 @@ class ScapySender(Sender):
     '''
     reset the frame to match the initial one
     '''
+
     def unflip(self):
         for i in self.flippedBit:
             self.trame.invert(i)
         self.flippedBit = []
-    
+
     '''
     return true if the current frame checksum match the initial one
     '''
+
     def checkIfErronned(self):
-        
+
         currentCheksum = self.crc32_func(
             self.trame.bytes[
                 :-

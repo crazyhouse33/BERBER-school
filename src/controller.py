@@ -106,4 +106,3 @@ class Controller:
         except AttributeError:
             isAdmin = ctypes.windll.shell32.IsUserAnAdmin() != 0
         return isAdmin
-
