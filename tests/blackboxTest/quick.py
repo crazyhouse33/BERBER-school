@@ -25,25 +25,13 @@ class TestBlackBox(unittest.TestCase):
                     self.blackBoxTest(
                         '-q -m ' + mode + ' -e ' + supervisor +
                         ' -s ' + scenario + ' 10000 0',
-                        '10000 0.0 10322 ' +
+                        '10000 0.0 1468 10322 ' +
                         anyFloat)
-                    """
-                    self.blackBoxTest(
-
-                        '-q -m ' + mode + ' -e '+ supervisor+ ' -s '+ scenario+ ' -H 1 -P 1 50 0',
-                        '50 0.0 100 ' +
-                        anyFloat)
-
-                    self.blackBoxTest(
-                        '-q -m ' + mode + ' -e '+ supervisor+ ' -s '+ scenario+ ' -H 0 -P 1 1000 0',
-                        '1000 0.0 1000 ' +
-                        anyFloat)
-                    """
 
     def testDelayed(self):
         delayed = 0.2
-        result = self.getResult('-q -m ' + 'simulated -e bit -P 1 -s randomF ' + '-d ' + str(delayed) + ' 2 0'
-                                )
+        result = self.getResult('-q -m ' + 'simulated -e bit -P 1 -s randomF ' + '-d ' + str(delayed) + ' 2 0')['result']
+                                
         result = result.split(' ')
         time = result[3]
         timeFloat = float(time)
@@ -54,7 +42,8 @@ class TestBlackBox(unittest.TestCase):
 
         regexp = re.compile(expected)
 
-        result = self.getResult(command)
+        resultDict = self.getResult(command)
+        result= resultDict['result']
 
         doResultMatchExpected = regexp.match(result)
         if doResultMatchExpected is None:
@@ -65,7 +54,7 @@ class TestBlackBox(unittest.TestCase):
                 expected)
         self.assertTrue(doResultMatchExpected)
 
-        self.bonusTests(args, controller)
+        self.bonusTests(resultDict['args'], resultDict['controller'])
         return result
 
     def getResult(self, command):
@@ -88,11 +77,14 @@ class TestBlackBox(unittest.TestCase):
         sys.stdout = tmpStdOut = io.StringIO()
         controller.run()
         sys.stdout = sys.__stdout__
-        return tmpStdOut.getvalue()
+        return {'args' : args, 'result' : tmpStdOut.getvalue(), 'controller' : controller}
 
-    def bonusTests(self, args, terminatedController):
-        """test aditional stuff thanks to supervisors stats. Not blackbox anymore"""
-        pass
+    def bonusTests(self, args, controller):
+        """test a controller in terminated state. """
+        supervisor = controller.chosenScenario.supervisor
+        scenario=controller.chosenScenario
+        sender=controller.chosenSender
+        self.assertEqual(scenario.predictedNumberOfPacket-supervisor.packetFailure, supervisor.numberOfPacket)
 
 
 if __name__ == '__main__':

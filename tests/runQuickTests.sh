@@ -1,7 +1,7 @@
 #!/bin/bash
 dir="${0%/*}"
 cd "$dir"/blackboxTest
-#python3 -m unittest quick
+python3 -m unittest quick
 
 cd ../unitTest
 python3 testArgParser.py
