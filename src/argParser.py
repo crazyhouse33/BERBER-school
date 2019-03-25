@@ -4,9 +4,9 @@ import psutil #check existence of iface and mtu
 
 
 class Parser:
-    """parse the arguments, TODO make only fileSize positional"""
+    """parse the arguments"""
     def __init__(self):
-        defaultPS = 1454
+        defaultPS = 1468
         defaultHS = 46
         defaultFS = 10000
         defaultDelay = 0
@@ -16,7 +16,7 @@ class Parser:
         defaultMode='scapy'
         defaultIface='lo'
         self.parser = ArgumentParser(
-            description='Simulation to observe the trade-off between small/large packet in non negligeable BER environment. Default settings for Headers/Payload Size correspond to UDP over IP over Ethernet scenario')
+            description='Simulation to observe the trade-off between small and large packets in an environment where BER is not negligeable. Default settings for Headers/Payload Size correspond to UDP over IP over Ethernet without options')
 
         self.parser.add_argument(
             '-P',
@@ -34,14 +34,12 @@ class Parser:
             str(defaultHS),
             default=defaultHS)
 
-
-
         self.parser.add_argument(
             '-d',
             '--delayed',
             type=float,
-            help='float specifing a minimum time in second to wait betwen 2 trames. Default is ' +
-            str(defaultDelay) + 'WARNING: there is no way to simulate realistic interframe timing (nanosecond precision) because of thread sleeping precision in currents OS (milisecond precision)',
+            help='float specifing a minimum time in second to wait between 2 frames. Default is ' +
+            str(defaultDelay) + 'WARNING: there is no way to simulate realistic interframe timing (nanosecond precision) because of thread sleeping precision in currents OS (millisecond precision)',
             default=defaultDelay
             )
 
@@ -49,7 +47,7 @@ class Parser:
             '-i',
             '--iface',
             type=str,
-            help='str specifing the interface to be used for sending packet. Default is ' +
+            help='string specifing the interface to be used for sending packet. Default is ' +
             str(defaultIface),
             default=defaultIface
             )
@@ -58,7 +56,7 @@ class Parser:
             '-s',
             '--scenario',
             type=str,
-            help='string specifing wich scenario will be done. Default is Sending a file' +
+            help='string specifing which scenario will be launched. Default is Sending a file' +
             defaultScenario,
             default=defaultScenario,
             choices= ['file', 'string', 'random', 'randomF']
@@ -68,7 +66,7 @@ class Parser:
             '-m',
             '--mode',
             type=str,
-            help='string specifying the way packet are lunched. Default use scapy implementation' +
+            help='string specifying in which way packets are sent. Default is scapy implementation' +
             defaultMode,
             default=defaultMode,
             choices= ['scapy', 'socket', 'simulated']
@@ -79,7 +77,7 @@ class Parser:
             '-e',
             '--supervisor',
             type=str,
-            help='string switching the way errors are simulated. Default is bitWise' +
+            help='string switching how errors are simulated. Default is bit' +
             defaultSupervisor,
             default=defaultSupervisor,
             choices= ['bit', 'packet']
@@ -183,8 +181,9 @@ class Parser:
                 exit("Error: the interface specified do not exist. Exiting")
             if not iface.isup:
                 exit("Error: the interface specified is down. Exiting")
-            if headerSize + payloadSize > iface.mtu:
-                exit ("Error: the chosen option would generate trames of size "+ str(headerSize+payloadSize)+' Bytes. But the selectioned interface have an MTU of only '+ str(iface.mtu))
-
+            
+            if headerSize + payloadSize > iface.mtu + 18: #18 = size of ethernet header (not included in MTU)
+                exit ("Error: the chosen option would generate frames of size "+ str(headerSize+payloadSize)+' Bytes. But the selected interface have an MTU of only '+ str(iface.mtu))
+            
 
 
