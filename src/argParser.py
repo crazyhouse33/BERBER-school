@@ -181,9 +181,9 @@ class Parser:
                 exit("Error: the interface specified do not exist. Exiting")
             if not iface.isup:
                 exit("Error: the interface specified is down. Exiting")
-            
+            '''
             if headerSize + payloadSize > iface.mtu + 18: #18 = size of ethernet header (not included in MTU)
                 exit ("Error: the chosen option would generate frames of size "+ str(headerSize+payloadSize)+' Bytes. But the selected interface have an MTU of only '+ str(iface.mtu))
-            
+            '''
 
 
