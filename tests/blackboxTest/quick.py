@@ -8,6 +8,7 @@ sys.path.append("../../src/")
 from controller import Controller
 from argParser import Parser
 anyFloat = "\d+\.\d+"
+anyThing = "[^ ]*"
 
 toTestNumericScenarios = ('random', 'randomF')
 toTestSupervisors = ('bit', 'packet')
@@ -27,6 +28,10 @@ class TestBlackBox(unittest.TestCase):
                         ' -s ' + scenario + ' 10000 0',
                         '10000 0.0 1468 10322 ' +
                         anyFloat)
+                    self.blackBoxTest(
+                        '-q -m ' + mode + ' -e ' + supervisor +
+                        ' -s ' + scenario + ' 10000 0.001',
+                        5 * anyThing)
 
     def testDelayed(self):
         delayed = 0.2
@@ -84,7 +89,6 @@ class TestBlackBox(unittest.TestCase):
         supervisor = controller.chosenScenario.supervisor
         scenario=controller.chosenScenario
         sender=controller.chosenSender
-        self.assertEqual(scenario.predictedNumberOfPacket-supervisor.packetFailure, supervisor.numberOfPacket)
 
 
 if __name__ == '__main__':

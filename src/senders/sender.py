@@ -21,6 +21,10 @@ class Sender(abc.ABC):
     def getSize(self):
         """return size of the current loaded Packet"""
         return self.totalSize
+    @abc.abstractmethod
+    def flipBit(self,position):
+        """flip bits at given position (int or array of int)"""
+        pass
 
     def computeTotalSize(self):
         self.totalSize = self.payloadSize + self.headerSize

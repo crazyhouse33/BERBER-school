@@ -12,3 +12,7 @@ class SimulatedSender(Sender):
     def setPayload(self, payload):
         self.payloadSize = len(payload)
         self.computeTotalSize()
+
+    def flipBit(self, position):
+        #do nothing
+        pass
