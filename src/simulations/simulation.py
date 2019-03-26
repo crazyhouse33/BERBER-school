@@ -27,11 +27,6 @@ class Simulation(abc.ABC):
     def updateBar(self):
         return self.progressBar.update(self.supervisor.numberOfPacket)
 
-
-    def getPredictedNumberOfPacket(self):
-        """needed for progress bar, need to set the value in the prerun"""
-        return self.predictedNumberOfPacket
-
     def terminate(self,progressBarThread=None,quiet=False):
         t1 = time.time()
         timeTaken = str(1000 * (t1 - self.startTime))

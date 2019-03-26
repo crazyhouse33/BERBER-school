@@ -40,9 +40,10 @@ class Supervisor:
     def sendErroned(self):
         """send erroned frame in purpose"""
         self.sender.flipBit(int(self.totalSize / 2))
-        self.sender.send()
+        nbByte = self.sender.send()
         self.afterSend()
         self.packetFailure += 1
+        return nbByte
 
     def afterSend(self):
         time.sleep(self.interFrameDelay)
