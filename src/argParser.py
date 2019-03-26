@@ -181,6 +181,7 @@ class Parser:
             if not iface.isup:
                 exit("Error: the interface specified is down. Exiting")
 
+
             offset = 18 - 4
             """18 = size of ethernet header (MTU= size of L3 and +)
             4 is because we add 4 byte in the payload for the fake checksum
