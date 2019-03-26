@@ -14,5 +14,5 @@ class SimulatedSender(Sender):
         self.computeTotalSize()
 
     def flipBit(self, position):
-        #do nothing
+        # do nothing
         pass

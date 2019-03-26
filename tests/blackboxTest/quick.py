@@ -34,9 +34,15 @@ class TestBlackBox(unittest.TestCase):
                         5 * anyThing)
 
     def testDelayed(self):
+        print('testing non 0 delayed mode')
         delayed = 0.2
-        result = self.getResult('-q -m ' + 'simulated -e bit -P 1 -s randomF ' + '-d ' + str(delayed) + ' 2 0')['result']
-                                
+        result = self.getResult(
+            '-q -m ' +
+            'simulated -e bit -P 1 -s randomF ' +
+            '-d ' +
+            str(delayed) +
+            ' 2 0')['result']
+
         result = result.split(' ')
         time = result[3]
         timeFloat = float(time)
@@ -48,7 +54,7 @@ class TestBlackBox(unittest.TestCase):
         regexp = re.compile(expected)
 
         resultDict = self.getResult(command)
-        result= resultDict['result']
+        result = resultDict['result']
 
         doResultMatchExpected = regexp.match(result)
         if doResultMatchExpected is None:
@@ -82,13 +88,14 @@ class TestBlackBox(unittest.TestCase):
         sys.stdout = tmpStdOut = io.StringIO()
         controller.run()
         sys.stdout = sys.__stdout__
-        return {'args' : args, 'result' : tmpStdOut.getvalue(), 'controller' : controller}
+        return {
+            'args': args, 'result': tmpStdOut.getvalue(), 'controller': controller}
 
     def bonusTests(self, args, controller):
         """test a controller in terminated state. """
         supervisor = controller.chosenScenario.supervisor
-        scenario=controller.chosenScenario
-        sender=controller.chosenSender
+        scenario = controller.chosenScenario
+        sender = controller.chosenSender
 
 
 if __name__ == '__main__':
