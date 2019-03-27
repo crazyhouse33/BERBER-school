@@ -62,8 +62,8 @@ class Supervisor:
         pass
 
     def preSend(self):
-        # record data sended
-        self.numberOfPacket += 1  # only usefull for stat
+        # record data sent
+        self.numberOfPacket += 1  # only useful for stats
         self.payloadSended += self.loadedPayloadSize
 
     def chanceOfPacketFailure(self):

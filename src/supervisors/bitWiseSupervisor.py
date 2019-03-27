@@ -9,7 +9,7 @@ class BitWiseSupervisor(Supervisor):
     '''
 
     def realSend(self):
-        self.numberOfPacket += 1
+        #self.numberOfPacket += 1
         while True:
             erroned = self.applyBER()
             self.senderSend()
