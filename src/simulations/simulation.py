@@ -1,6 +1,5 @@
 import abc
 from abc import ABCMeta, abstractmethod  # strange error when removing that
-from progressBar import ProgressBar
 import time
 
 
@@ -11,21 +10,15 @@ class Simulation(abc.ABC):
         self.supervisor = supervisor
         self.dataToSend=dataToSend
         self.payloadSize=payloadSize
-        #initialize end to non zero value to avoid thread concurrency fail
-        self.progressBar= ProgressBar(1, suffix='Complete')
 
     def preRun(self):
         """extends this to set everything ( predictedNumberOfPacket, files...) before starting the timer"""
         #set end to the good value
-        self.progressBar.end=self.predictedNumberOfPacket
         self.startTime = time.time()
 
     @abstractmethod
     def run(self):
         pass
-
-    def updateBar(self):
-        return self.progressBar.update(self.supervisor.numberOfPacket)
 
     def terminate(self,progressBarThread=None,quiet=False):
         t1 = time.time()

@@ -13,8 +13,9 @@ class Supervisor:
         self.BER = BER
         self.interFrameDelay = interFrameDelay
         if interFrameDelay != 0:
-            #doing that to avoid time.sleep(0), which arent impacting perf but make the progress bar buggy
-            self.afterSend= self.afterSendSleep
+            # doing that to avoid time.sleep(0), which arent impacting perf but
+            # make the progress bar buggy
+            self.afterSend = self.afterSendSleep
 
     def send(self):
         """When using scapy, just send the packet since error will be simulated in the subclasses"""

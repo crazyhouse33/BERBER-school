@@ -5,6 +5,8 @@ from simulations.sendTrueFile import FileSimulation
 from simulations.randomSimulation import RandomSimulation
 from simulations.randomOnFlySimulation import RandomOnFlySimulation
 
+from progressBar import ProgressBar
+
 from senders.socketSender import SocketSender
 from senders.simulatedSender import SimulatedSender
 from senders.scapySender import ScapySender
@@ -23,6 +25,9 @@ class Controller:
                  headerSize, quiet, scenario, supervisorString, mode, iface):
         self.emergencyStop = False
         self.quiet = quiet
+
+
+        self.progressBar= ProgressBar(1, suffix='Complete')
 
         self.chosenSender = self.instantiateSender(mode, headerSize, iface)
 
@@ -77,6 +82,7 @@ class Controller:
                     target=self.threadFunction)
                 progressBarThread.start()
             self.chosenScenario.preRun()
+            self.progressBar.end=self.chosenScenario.predictedNumberOfPacket
             self.chosenScenario.run()
         # avoiding progress bar waiting impact on the timer by delagating the
         # join to the simulation
@@ -96,7 +102,7 @@ class Controller:
             self.chosenScenario.terminate(quiet=True)
 
     def threadFunction(self):
-        while not self.emergencyStop and self.chosenScenario.updateBar():
+        while not self.emergencyStop and self.updateBar():
             time.sleep(0.1)
         print('\n')
 
@@ -106,3 +112,6 @@ class Controller:
         except AttributeError:
             isAdmin = ctypes.windll.shell32.IsUserAnAdmin() != 0
         return isAdmin
+
+    def updateBar(self):
+        return self.progressBar.update(self.chosenScenario.supervisor.numberOfPacket)
