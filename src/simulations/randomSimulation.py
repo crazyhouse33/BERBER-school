@@ -1,5 +1,7 @@
 import random
 import string
+from base64 import b64encode
+from os import urandom
 
 from simulations.randomOnFlySimulation import RandomOnFlySimulation
 
@@ -20,6 +22,13 @@ class RandomSimulation(RandomOnFlySimulation):
             payload = self.splittedData[i]
             self.supervisor.setAndSend(payload)
 
+    #augment performance for this simulation(the syscall per packet overhead is to great in randomF)
+    def getRandomString(self, size):
+        random_bytes = urandom(size)
+        
+        randomString= b64encode(random_bytes).decode('utf-8')
+        randomString= randomString[:size]
+        return randomString
 
     '''
     turn a series of data into an array of strings of size splitSize

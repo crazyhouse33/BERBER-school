@@ -20,3 +20,5 @@ class FileSimulation(Simulation):
             if not buff:
                 break
             self.supervisor.setAndSend(buff)
+
+

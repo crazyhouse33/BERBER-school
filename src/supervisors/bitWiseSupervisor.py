@@ -17,7 +17,7 @@ class BitWiseSupervisor(Supervisor):
             if not erroned:
                 break
             self.packetFailure += 1
-            self.sender.unflip()
+            self.sender.resetTrame()
     '''
     Invert all bits of the frame to send, with a probability corresponding to BER
     '''

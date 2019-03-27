@@ -53,11 +53,9 @@ class ScapySender(Sender):
         self.trame.append(BitArray(bytes(payload)))
         self.initialCheckSum = self.getFCS()
 
-#        print ("before check:",self.trame, "check=", self.initialCheckSum)
         self.trame.append(BitArray(self.initialCheckSum.to_bytes(4, 'little')))
-#       print ("after check:",self.trame)
+        self.initialTrame = BitArray(self.trame)
         self.computeTotalSize()
-        return self.initialCheckSum
 
     '''
     compute total frame ethernet checksum
@@ -75,7 +73,6 @@ class ScapySender(Sender):
     '''
 
     def flipBit(self, position):
-        self.flippedBit.append(position)
         self.trame.invert(position)
 
 
@@ -84,10 +81,8 @@ class ScapySender(Sender):
     reset the frame to match the initial one
     '''
 
-    def unflip(self):
-        for i in self.flippedBit:
-            self.trame.invert(i)
-        self.flippedBit = []
+    def resetTrame(self):
+        self.trame = BitArray(self.initialTrame)
 
     '''
     return true if the current frame checksum match the initial one

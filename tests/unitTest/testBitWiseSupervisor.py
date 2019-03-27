@@ -24,7 +24,7 @@ class testArgParser(unittest.TestCase):
         # ber is 0, frame must be clean
         self.assertFalse(supervisor.applyBER())
 
-        sender.unflip()
+        sender.resetTrame()
         supervisor.BER = 1
         # ber is 1, frame must be wrong
         self.assertTrue(supervisor.applyBER())

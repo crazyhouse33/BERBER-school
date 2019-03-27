@@ -26,8 +26,7 @@ class Controller:
         self.emergencyStop = False
         self.quiet = quiet
 
-
-        self.progressBar= ProgressBar(1, suffix='Complete')
+        self.progressBar = ProgressBar(1, suffix='Complete')
 
         self.chosenSender = self.instantiateSender(mode, headerSize, iface)
 
@@ -82,7 +81,7 @@ class Controller:
                     target=self.threadFunction)
                 progressBarThread.start()
             self.chosenScenario.preRun()
-            self.progressBar.end=self.chosenScenario.predictedNumberOfPacket
+            self.progressBar.end = self.chosenScenario.predictedNumberOfPacket
             self.chosenScenario.run()
         # avoiding progress bar waiting impact on the timer by delagating the
         # join to the simulation
@@ -114,4 +113,5 @@ class Controller:
         return isAdmin
 
     def updateBar(self):
-        return self.progressBar.update(self.chosenScenario.supervisor.numberOfPacket)
+        return self.progressBar.update(
+            self.chosenScenario.supervisor.numberOfPacket)

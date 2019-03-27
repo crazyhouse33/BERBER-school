@@ -8,28 +8,29 @@ class Simulation(abc.ABC):
 
     def __init__(self, supervisor, dataToSend, payloadSize):
         self.supervisor = supervisor
-        self.dataToSend=dataToSend
-        self.payloadSize=payloadSize
+        self.dataToSend = dataToSend
+        self.payloadSize = payloadSize
 
     def preRun(self):
         """extends this to set everything ( predictedNumberOfPacket, files...) before starting the timer"""
-        #set end to the good value
+        # set end to the good value
         self.startTime = time.time()
 
     @abstractmethod
     def run(self):
         pass
 
-    def terminate(self,progressBarThread=None,quiet=False):
+    def terminate(self, progressBarThread=None, quiet=False):
         t1 = time.time()
         timeTaken = str(1000 * (t1 - self.startTime))
 
-        #if progressBarThread is running, need to wait him before printing anything
-        if progressBarThread!= None:
+        # if progressBarThread is running, need to wait him before printing
+        # anything
+        if progressBarThread is not None:
             progressBarThread.join()
         # quiet Mode
         if (quiet):
-            print (
+            print(
                 self.supervisor.fileSize,
                 self.supervisor.BER,
                 self.payloadSize,
@@ -49,6 +50,3 @@ class Simulation(abc.ABC):
                 errors,
                 '\n\tTime: ' + timeTaken + 'ms'
             )
-
-
-
