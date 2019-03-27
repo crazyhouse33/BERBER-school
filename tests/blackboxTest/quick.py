@@ -30,7 +30,7 @@ class TestBlackBox(unittest.TestCase):
                         anyFloat)
                     self.blackBoxTest(
                         '-q -m ' + mode + ' -e ' + supervisor +
-                        ' -s ' + scenario + ' 10000 0.001',
+                        ' -s ' + scenario + ' -a 10000 0.001',
                         5 * anyThing)
 
     def testDelayed(self):
@@ -83,7 +83,9 @@ class TestBlackBox(unittest.TestCase):
             args.scenario,
             args.supervisor,
             args.mode,
-            args.iface)
+            args.iface,
+            args.adaptative,
+            args.maxTrame)
 
         sys.stdout = tmpStdOut = io.StringIO()
         controller.run()

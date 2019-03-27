@@ -14,12 +14,12 @@ class testArgParser(unittest.TestCase):
         sender = ScapySender(46, "eth0")
         sender.totalSize = 1000
 
-        simul = RandomSimulation(0, 0, 0)
+        simul = RandomSimulation(0, 0, 0, 0)
 
         payload = simul.getRandomString(100)
         sender.setPayload(payload)
         print("payload tested : " + payload)
-        supervisor = BitWiseSupervisor(sender, 0, 0)
+        supervisor = BitWiseSupervisor(sender, 0, 0, 8000000)
 
         # ber is 0, frame must be clean
         self.assertFalse(supervisor.applyBER())

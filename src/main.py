@@ -20,5 +20,7 @@ controller = Controller(
     args.scenario,
     args.supervisor,
     args.mode,
-    args.iface)
+    args.iface,
+    args.adaptative,
+    args.maxTrame)
 controller.run()

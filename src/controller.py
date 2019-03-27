@@ -22,7 +22,7 @@ import ctypes
 class Controller:
 
     def __init__(self, BER, data, delayed, payloadSize,
-                 headerSize, quiet, scenario, supervisorString, mode, iface):
+                 headerSize, quiet, scenario, supervisorString, mode, iface, adaptative, maxTrame):
         self.emergencyStop = False
         self.quiet = quiet
 
@@ -30,17 +30,18 @@ class Controller:
 
         self.chosenSender = self.instantiateSender(mode, headerSize, iface)
 
-        chosenSupervisor = self.instantiateSupervisor(
+        self.chosenSupervisor = self.instantiateSupervisor(
             supervisorString,
             self.chosenSender,
             BER,
-            delayed)
+            delayed,
+            maxTrame)
 
         self.chosenScenario = self.instantiateScenario(
             scenario,
-            chosenSupervisor,
+            self.chosenSupervisor,
             data,
-            payloadSize)
+            payloadSize, adaptative)
 
     def instantiateSender(self, string, headerSize, iface):
         if (string == 'simulated'):
@@ -57,20 +58,22 @@ class Controller:
             return ScapySender(headerSize, iface)
         exit("Error: this mode do not exist")
 
-    def instantiateSupervisor(self, string, sender, BER, delayed):
+    def instantiateSupervisor(self, string, sender, BER, delayed, maxTrame):
         if (string == 'packet'):
-            return Supervisor(sender, BER, delayed)
+            return Supervisor(sender, BER, delayed, maxTrame)
         if (string == 'bit'):
-            return BitWiseSupervisor(sender, BER, delayed)
+            return BitWiseSupervisor(sender, BER, delayed, maxTrame)
         exit("Error: this supervisor do not exist")
 
-    def instantiateScenario(self, string, supervisor, data, payloadSize):
+    def instantiateScenario(
+            self, string, supervisor, data, payloadSize, adaptative):
         if (string == 'file'):
-            return FileSimulation(supervisor, data, payloadSize)
+            return FileSimulation(supervisor, data, payloadSize, adaptative)
         elif (string == 'random'):
-            return RandomSimulation(supervisor, data, payloadSize)
+            return RandomSimulation(supervisor, data, payloadSize, adaptative)
         elif (string == 'randomF'):
-            return RandomOnFlySimulation(supervisor, data, payloadSize)
+            return RandomOnFlySimulation(
+                supervisor, data, payloadSize, adaptative)
         exit("Error, this scenario do no exist")
 
     def run(self):
@@ -81,7 +84,7 @@ class Controller:
                     target=self.threadFunction)
                 progressBarThread.start()
             self.chosenScenario.preRun()
-            self.progressBar.end = self.chosenScenario.predictedNumberOfPacket
+            self.progressBar.end = self.chosenSupervisor.fileSize
             self.chosenScenario.run()
         # avoiding progress bar waiting impact on the timer by delagating the
         # join to the simulation
@@ -114,4 +117,4 @@ class Controller:
 
     def updateBar(self):
         return self.progressBar.update(
-            self.chosenScenario.supervisor.numberOfPacket)
+            self.chosenSupervisor.payloadSended)

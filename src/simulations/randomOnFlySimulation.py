@@ -9,20 +9,18 @@ class RandomOnFlySimulation(Simulation):
     def preRun(self):
 
         self.supervisor.fileSize = self.dataToSend
-        self.predictedNumberOfPacket, self.lastSize = divmod(
-            self.supervisor.fileSize, self.payloadSize)
-        self.cpt = self.predictedNumberOfPacket
-        if self.lastSize > 0:
-            self.predictedNumberOfPacket += 1
+        self.cpt = self.supervisor.fileSize
         Simulation.preRun(self)
 
     def run(self):
-        while self.cpt > 0:
-            self.cpt -= 1
-            self.supervisor.setAndSend(self.getRandomString(self.payloadSize))
-        # send last packet
-        if self.lastSize > 0:
-            self.supervisor.setAndSend(self.getRandomString(self.lastSize))
+        while self.cpt != 0:
+            bytesToSend = self.bytesPerPacket()
+            self.cpt -= bytesToSend
+            # correct last packet size
+            if self.cpt <= 0:
+                bytesToSend += self.cpt
+                self.cpt = 0
+            self.supervisor.setAndSend(self.getRandomString(bytesToSend))
 
     def getRandomString(self, sizeOfString):
         data = ""

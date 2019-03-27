@@ -8,12 +8,11 @@ class BitWiseSupervisor(Supervisor):
     Create and use a PacketSender to launch packet and actually computes statistics
     '''
 
-    def send(self):
+    def realSend(self):
         self.numberOfPacket += 1
         while True:
             erroned = self.applyBER()
-            self.byteCount += self.sender.send()
-            self.afterSend()
+            self.senderSend()
             if not erroned:
                 break
             self.packetFailure += 1

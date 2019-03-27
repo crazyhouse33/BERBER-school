@@ -88,6 +88,12 @@ class Parser:
                                  action="store_true")
 
         self.parser.add_argument(
+            "-a",
+            '--adaptative',
+            help="optimise payload size for each packet in function of current BER",
+            action="store_true")
+
+        self.parser.add_argument(
             'data',
             type=str,
             help='data to send. In simulated/random scenario, this argument is the size of the virtual file to be sent. a letter \'G\', \'M\' or \'K\' can be appended to specify a unit')
@@ -115,7 +121,7 @@ class Parser:
         self.checkData()
         self.checkPayloadSize()
         self.checkConflicts()
-        self.checkIface()
+        self.args.maxTrame = self.checkIfaceAndGetMTU()
 
         if (self.args.quiet == False):
             print("Simulation launched with :\n")
@@ -131,6 +137,12 @@ class Parser:
             if self.args.quiet == False:
                 print(
                     'WARNING: autohandled conflict: simulated only made sense used with the packet supervisor')
+
+        if self.args.adaptative and self.args.scenario == 'random':
+            self.args.scenario = 'randomF'
+            if self.args.quiet == False:
+                print(
+                    'WARNING: autohandled confict: random do not support adaptive mode. falled back to randomF')
 
     '''
     affect to self.data the effective value of data, after interpreting it with format <int><G/M/K>
@@ -170,7 +182,7 @@ class Parser:
             exit(
                 "Error: payloadSize is not valid, it must be a positive integer. Exiting")
 
-    def checkIface(self):
+    def checkIfaceAndGetMTU(self):
         if not (self.args.mode == 'simulated'):
             headerSize = self.args.headerSize
             payloadSize = self.args.payloadSize
@@ -180,7 +192,6 @@ class Parser:
                 exit("Error: the interface specified do not exist. Exiting")
             if not iface.isup:
                 exit("Error: the interface specified is down. Exiting")
-
 
             offset = 18 - 4
             """18 = size of ethernet header (MTU= size of L3 and +)
@@ -194,3 +205,6 @@ class Parser:
                      str(iface.mtu +
                          18) +
                      " and we add 4 bytes of fake checksum to have errors visualisation of errors in wireshark")
+            return iface.mtu + offset
+        else:
+            return float('inf')
